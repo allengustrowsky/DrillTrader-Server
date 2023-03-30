@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  mysql-development:
+    image: mysql:latest
+    env_file:
+      - ./dev.env
+    environment: 
+      MYSQL_ROOT_PASSWORD: profitsForProphets
+      MYSQL_DATABASE: mystock
+    ports:
+      - "3308:3306"
+  mysql-test:
+    image: mysql:latest
+    env_file:
+      - test.env
+    environment: 
+      MYSQL_ROOT_PASSWORD: profitsForProphets
+      MYSQL_DATABASE: mystock-test
+    ports:
+      - "3309:3306"

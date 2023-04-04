@@ -25,7 +25,7 @@ export class User {
     @Property({
         length: 128,
     })
-    password_hash!: string;
+    apiKey!: string;
 
     @Property()
     is_admin?: boolean = false;

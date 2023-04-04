@@ -21,8 +21,4 @@ export class CreateUserDto {
     @Length(1, 32)
     @IsEmail()
     email_address: string;
-
-    @IsNotEmpty()
-    @Length(1, 128)
-    password_hash: string;
 }

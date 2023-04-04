@@ -1,3 +1,4 @@
+import { Optional } from "@nestjs/common";
 import { IsInt, IsNotEmpty, IsNumber } from "class-validator";
 
 export class CreatePortfolioAssetDto {
@@ -9,6 +10,7 @@ export class CreatePortfolioAssetDto {
     @IsInt()
     asset_id: number;
     
-    @IsNumber()
+    @IsNumber({ allowNaN: false })
+    @Optional()
     units: number;
 }

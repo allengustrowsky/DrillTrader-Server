@@ -13,12 +13,12 @@ export class CreateTransactionDto {
     asset_id: number;
 
     @IsNotEmpty()
-    @IsNumber()
+    @IsNumber({ allowNaN: false })
     @IsPositive()
     units: number;
 
     @IsNotEmpty()
-    @IsNumber()
+    @IsNumber({ allowNaN: false })
     @IsPositive()
     price: number;
 

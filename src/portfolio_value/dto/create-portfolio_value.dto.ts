@@ -7,7 +7,7 @@ export class CreatePortfolioValueDto {
     portfolio_id: number;
 
     @IsNotEmpty()
-    @IsNumber()
+    @IsNumber({ allowNaN: false })
     value: number;
 
     @IsNotEmpty()

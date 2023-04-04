@@ -14,6 +14,7 @@ export class PortfolioValue {
     @Property()
     value!: number
 
+    // received from client in unix time and stored in unix time
     @Property()
     created_at!: number
 }

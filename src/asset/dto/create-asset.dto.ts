@@ -1,7 +1,6 @@
-import { IsInt, IsNotEmpty, IsString } from "class-validator";
+import { IsInt, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateAssetDto {
-
     @IsNotEmpty()
     @IsString()
     name: string;

@@ -5,25 +5,25 @@ import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 
 @Injectable()
 export class PortfolioService {
-  constructor(private readonly em: EntityManager) {}
+    constructor(private readonly em: EntityManager) {}
 
-  create(createPortfolioDto: CreatePortfolioDto) {
-    return 'This action adds a new portfolio';
-  }
+    create(createPortfolioDto: CreatePortfolioDto) {
+        return 'This action adds a new portfolio';
+    }
 
-  findAll() {
-    return `This action returns all portfolio`;
-  }
+    findAll() {
+        return `This action returns all portfolio`;
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} portfolio`;
-  }
+    findOne(id: number) {
+        return `This action returns a #${id} portfolio`;
+    }
 
-  update(id: number, updatePortfolioDto: UpdatePortfolioDto) {
-    return `This action updates a #${id} portfolio`;
-  }
+    update(id: number, updatePortfolioDto: UpdatePortfolioDto) {
+        return `This action updates a #${id} portfolio`;
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} portfolio`;
-  }
+    remove(id: number) {
+        return `This action removes a #${id} portfolio`;
+    }
 }

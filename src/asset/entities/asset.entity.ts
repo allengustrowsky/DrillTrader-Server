@@ -1,23 +1,23 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class Asset {
     @PrimaryKey({
         autoincrement: true,
     })
-    id!: number
+    id!: number;
 
     @Property({
         length: 64,
     })
-    name!: string
+    name!: string;
 
     // TODO: make foreign key
     @Property()
-    asset_type_id: number
+    asset_type_id: number;
 
     @Property({
         length: 16,
     })
-    ticker_symbol!: string
+    ticker_symbol!: string;
 }

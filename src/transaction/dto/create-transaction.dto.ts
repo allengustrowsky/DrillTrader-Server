@@ -1,5 +1,10 @@
-import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsPositive } from "class-validator";
-
+import {
+    IsBoolean,
+    IsInt,
+    IsNotEmpty,
+    IsNumber,
+    IsPositive,
+} from 'class-validator';
 
 export class CreateTransactionDto {
     @IsNotEmpty()

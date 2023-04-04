@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsNumber, IsPositive } from "class-validator";
+import { IsInt, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
 
 export class CreatePortfolioValueDto {
     @IsNotEmpty()

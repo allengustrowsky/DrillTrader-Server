@@ -1,20 +1,20 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core'
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class PortfolioValue {
     @PrimaryKey({
-        autoincrement: true
+        autoincrement: true,
     })
-    readonly id!: number
+    readonly id!: number;
 
     // TODO: FK referencing portfolio
     @Property()
-    portfolio_id!: number
+    portfolio_id!: number;
 
     @Property()
-    value!: number
+    value!: number;
 
     // received from client in unix time and stored in unix time
     @Property()
-    created_at!: number
+    created_at!: number;
 }

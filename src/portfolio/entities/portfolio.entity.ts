@@ -1,14 +1,13 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class Portfolio {
     @PrimaryKey({
-        autoincrement: true
+        autoincrement: true,
     })
-    readonly id!: number
+    readonly id!: number;
 
     // TODO: FK referencing user
     @Property()
-    user_id!: number
+    user_id!: number;
 }
-

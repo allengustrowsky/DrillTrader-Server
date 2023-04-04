@@ -3,18 +3,20 @@ import { PortfolioValueController } from './portfolio_value.controller';
 import { PortfolioValueService } from './portfolio_value.service';
 
 describe('PortfolioValueController', () => {
-  let controller: PortfolioValueController;
+    let controller: PortfolioValueController;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      controllers: [PortfolioValueController],
-      providers: [PortfolioValueService],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            controllers: [PortfolioValueController],
+            providers: [PortfolioValueService],
+        }).compile();
 
-    controller = module.get<PortfolioValueController>(PortfolioValueController);
-  });
+        controller = module.get<PortfolioValueController>(
+            PortfolioValueController,
+        );
+    });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(controller).toBeDefined();
+    });
 });

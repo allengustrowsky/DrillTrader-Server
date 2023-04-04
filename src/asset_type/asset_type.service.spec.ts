@@ -2,17 +2,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AssetTypeService } from './asset_type.service';
 
 describe('AssetTypeService', () => {
-  let service: AssetTypeService;
+    let service: AssetTypeService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [AssetTypeService],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            providers: [AssetTypeService],
+        }).compile();
 
-    service = module.get<AssetTypeService>(AssetTypeService);
-  });
+        service = module.get<AssetTypeService>(AssetTypeService);
+    });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(service).toBeDefined();
+    });
 });

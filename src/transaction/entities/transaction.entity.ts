@@ -1,26 +1,26 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class Transaction {
     @PrimaryKey({
-        autoincrement: true
+        autoincrement: true,
     })
-    readonly id!: number
+    readonly id!: number;
 
     // TODO: FK referencing portfolio
     @Property()
-    portfolio_id!: number
+    portfolio_id!: number;
 
     // TODO: FK referencing asset
     @Property()
-    asset_id!: number
+    asset_id!: number;
 
     @Property()
-    units!: number
+    units!: number;
 
     @Property()
-    price!: number
+    price!: number;
 
     @Property()
-    is_buy!: boolean
+    is_buy!: boolean;
 }

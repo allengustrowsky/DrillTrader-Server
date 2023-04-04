@@ -1,32 +1,32 @@
-import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
 
 @Entity()
 export class User {
     @PrimaryKey({
         autoincrement: true,
     })
-    readonly id!: number
+    readonly id!: number;
 
     @Property({
         length: 32,
     })
-    first_name!: string
+    first_name!: string;
 
     @Property({
         length: 32,
     })
-    last_name!: string
+    last_name!: string;
 
     @Property({
         length: 32,
     })
-    email_address!: string
+    email_address!: string;
 
     @Property({
         length: 128,
     })
-    password_hash!: string
+    password_hash!: string;
 
     @Property()
-    is_admin?: boolean = false
+    is_admin?: boolean = false;
 }

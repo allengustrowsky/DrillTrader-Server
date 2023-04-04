@@ -9,7 +9,7 @@ export class PortfolioValue {
 
     // TODO: FK referencing portfolio
     @Property()
-    portfolio_id: number
+    portfolio_id!: number
 
     @Property()
     value!: number

@@ -5,12 +5,12 @@ export class Asset {
     @PrimaryKey({
         autoincrement: true,
     })
-    id: number
+    id!: number
 
     @Property({
         length: 64,
     })
-    name: string
+    name!: string
 
     // TODO: make foreign key
     @Property()
@@ -19,5 +19,5 @@ export class Asset {
     @Property({
         length: 16,
     })
-    ticker_symbol: string
+    ticker_symbol!: string
 }

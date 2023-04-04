@@ -28,5 +28,5 @@ export class User {
     password_hash!: string
 
     @Property()
-    is_admin: boolean = false
+    is_admin?: boolean = false
 }

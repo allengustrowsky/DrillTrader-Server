@@ -16,5 +16,5 @@ export class PortfolioAsset {
     asset_id!: number
 
     @Property()
-    units: number
+    units!: number
 }

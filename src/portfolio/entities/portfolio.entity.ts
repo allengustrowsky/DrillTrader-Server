@@ -9,6 +9,6 @@ export class Portfolio {
 
     // TODO: FK referencing user
     @Property()
-    user_id: number
+    user_id!: number
 }
 

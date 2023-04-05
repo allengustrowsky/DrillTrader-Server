@@ -10,7 +10,9 @@ import {
 import { PortfolioValueService } from './portfolio_value.service';
 import { CreatePortfolioValueDto } from './dto/create-portfolio_value.dto';
 import { UpdatePortfolioValueDto } from './dto/update-portfolio_value.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Portfolio-Value')
 @Controller('portfolio-value')
 export class PortfolioValueController {
     constructor(

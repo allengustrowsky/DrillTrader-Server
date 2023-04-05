@@ -10,7 +10,9 @@ import {
 import { PortfolioAssetService } from './portfolio_asset.service';
 import { CreatePortfolioAssetDto } from './dto/create-portfolio_asset.dto';
 import { UpdatePortfolioAssetDto } from './dto/update-portfolio_asset.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Portfolio-Asset')
 @Controller('portfolio-asset')
 export class PortfolioAssetController {
     constructor(

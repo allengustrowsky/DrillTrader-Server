@@ -10,7 +10,9 @@ import {
 import { AssetTypeService } from './asset_type.service';
 import { CreateAssetTypeDto } from './dto/create-asset_type.dto';
 import { UpdateAssetTypeDto } from './dto/update-asset_type.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Asset-Type')
 @Controller('asset-type')
 export class AssetTypeController {
     constructor(private readonly assetTypeService: AssetTypeService) {}

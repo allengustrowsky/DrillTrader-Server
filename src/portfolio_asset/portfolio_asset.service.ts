@@ -2,13 +2,16 @@ import { EntityManager } from '@mikro-orm/mysql';
 import { Injectable } from '@nestjs/common';
 import { CreatePortfolioAssetDto } from './dto/create-portfolio_asset.dto';
 import { UpdatePortfolioAssetDto } from './dto/update-portfolio_asset.dto';
+import { PortfolioAsset } from './entities/portfolio_asset.entity';
 
 @Injectable()
 export class PortfolioAssetService {
     constructor(private readonly em: EntityManager) {}
 
-    create(createPortfolioAssetDto: CreatePortfolioAssetDto) {
-        return 'This action adds a new portfolioAsset';
+    async create(createPortfolioAssetDto: CreatePortfolioAssetDto) {
+        const portfolio_asset = new PortfolioAsset(createPortfolioAssetDto)
+        await this.em.persistAndFlush(portfolio_asset)
+        return portfolio_asset
     }
 
     findAll() {

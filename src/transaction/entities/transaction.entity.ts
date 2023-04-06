@@ -1,7 +1,18 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { create } from 'domain';
+import { CreatePortfolioDto } from 'src/portfolio/dto/create-portfolio.dto';
+import { CreateTransactionDto } from '../dto/create-transaction.dto';
 
 @Entity()
 export class Transaction {
+    constructor(createTransactionDto: CreateTransactionDto) {
+        this.portfolio_id = createTransactionDto.portfolio_id
+        this.asset_id = createTransactionDto.asset_id
+        this.units = createTransactionDto.units
+        this.price = createTransactionDto.price
+        this.is_buy = createTransactionDto.is_buy
+    }
+    
     @PrimaryKey({
         autoincrement: true,
     })

@@ -1,6 +1,5 @@
-import { Optional } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsNumber } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 
 export class CreatePortfolioAssetDto {
     @ApiProperty({
@@ -24,6 +23,6 @@ export class CreatePortfolioAssetDto {
         description: 'This is an optional property',
     })
     @IsNumber({ allowNaN: false })
-    @Optional()
+    @IsOptional()
     units: number;
 }

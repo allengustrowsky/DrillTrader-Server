@@ -1,4 +1,5 @@
 import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { randomBytes } from 'crypto';
 
 @Entity()
 export class User {
@@ -25,7 +26,7 @@ export class User {
     @Property({
         length: 128,
     })
-    apiKey!: string;
+    apiKey = randomBytes(128).toString('hex');
 
     @Property()
     is_admin?: boolean = false;

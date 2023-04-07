@@ -34,4 +34,8 @@ export class Transaction {
 
     @Property()
     is_buy!: boolean;
+
+    @Property()
+    // formatting credit to AlwaysSunny from https://stackoverflow.com/questions/53033014/javascript-remove-milliseconds-from-date-object
+    created_at = (new Date).toISOString().split('.')[0]+"Z"
 }

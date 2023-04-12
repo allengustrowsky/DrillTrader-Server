@@ -18,13 +18,4 @@ export class CreatePortfolioValueDto {
     @IsNotEmpty()
     @IsNumber({ allowNaN: false })
     value: number;
-
-    @ApiProperty({
-        type: Number,
-        description: 'This is a required property',
-    })
-    @IsNotEmpty()
-    @IsInt()
-    @IsPositive()
-    created_at: number;
 }

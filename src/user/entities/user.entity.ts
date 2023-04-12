@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, Unique} from '@mikro-orm/core';
 import { randomBytes } from 'crypto';
 import { create } from 'domain';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -28,6 +28,7 @@ export class User {
 
     @Property({
         length: 32,
+        unique: true,
     })
     email_address!: string;
 

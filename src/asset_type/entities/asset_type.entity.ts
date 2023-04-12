@@ -1,4 +1,4 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, PrimaryKey, Property, Unique } from '@mikro-orm/core';
 import { CreateAssetTypeDto } from '../dto/create-asset_type.dto';
 
 @Entity()
@@ -14,6 +14,7 @@ export class AssetType {
 
     @Property({
         length: 64,
+        unique: true,
     })
     name!: string;
 }

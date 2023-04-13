@@ -22,8 +22,9 @@ export class UserService {
         return user;
     }
 
-    findAll() {
-        return `This action returns all user`;
+    async findAll() {
+        const users = await this.em.find(User, {});
+        return users;
     }
 
     async findOne(id: number) {

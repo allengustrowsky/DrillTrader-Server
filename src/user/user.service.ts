@@ -25,7 +25,7 @@ export class UserService {
                 throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
             }
         }
-        
+
         return user;
     }
 
@@ -46,7 +46,14 @@ export class UserService {
         return `This action updates a #${id} user`;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} user`;
+    async remove(id: number) {
+        const user = await this.em.findOne(User, id);
+
+        if (user) {
+            await this.em.remove(user).flush();
+            return user;
+        } else {
+            throw new HttpException(`User with id ${id} does not exist!`, HttpStatus.BAD_REQUEST);
+        }
     }
 }

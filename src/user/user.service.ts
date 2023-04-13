@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { UniqueConstraintViolationException } from '@mikro-orm/core';
+import { Portfolio } from '../portfolio/entities/portfolio.entity';
 
 @Injectable()
 export class UserService {
@@ -11,11 +12,17 @@ export class UserService {
 
     async create(createUserDto: CreateUserDto) {
         const user = new User(createUserDto)
+        const portfolio = new Portfolio();
+        user.portfolio = portfolio;
+
         try {
-            await this.em.persistAndFlush(user)
+            await this.em.persistAndFlush(user);
+            await this.em.persistAndFlush(portfolio);
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
                 throw new HttpException("Email must be unique", HttpStatus.BAD_REQUEST)
+            } else {
+                throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
             }
         }
         

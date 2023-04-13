@@ -1,7 +1,8 @@
-import { Entity, PrimaryKey, Property, Unique} from '@mikro-orm/core';
+import { Entity, OneToOne, PrimaryKey, Property, Unique} from '@mikro-orm/core';
 import { randomBytes } from 'crypto';
 import { create } from 'domain';
 import { CreateUserDto } from '../dto/create-user.dto';
+import { Portfolio } from '../../portfolio/entities/portfolio.entity';
 
 @Entity()
 export class User {
@@ -45,4 +46,7 @@ export class User {
         type: "datetime"
     })
     created_at: Date = new Date()
+
+    @OneToOne(() => Portfolio, portfolio => portfolio.user, { owner: true })
+    portfolio!: Portfolio;
 }

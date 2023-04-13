@@ -20,8 +20,7 @@ export class ApiAuthGuard implements CanActivate  {
             const user = await this.em.find(User, { apiKey: apiKey });
             if (user.length !== 0) {
                 // TODO: attach user to request object 
-
-                console.log(user)
+                request.user = user[0];
             } else { // bad apiKey
                 throw new HttpException("Unauthorized!", HttpStatus.UNAUTHORIZED)
             }

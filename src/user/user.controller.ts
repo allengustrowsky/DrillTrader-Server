@@ -6,11 +6,13 @@ import {
     Patch,
     Param,
     Delete,
+    UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { ApiAuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('User')
 @Controller('user')
@@ -22,6 +24,7 @@ export class UserController {
         return this.userService.create(createUserDto);
     }
 
+    @UseGuards(ApiAuthGuard)
     @Get()
     findAll() {
         return this.userService.findAll();

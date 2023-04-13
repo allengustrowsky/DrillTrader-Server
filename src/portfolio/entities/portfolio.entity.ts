@@ -3,7 +3,7 @@ import { CreatePortfolioDto } from '../dto/create-portfolio.dto';
 import { User } from '../../user/entities/user.entity';
 import { Transaction } from '../../transaction/entities/transaction.entity';
 import { PortfolioAsset } from '../../portfolio_asset/entities/portfolio_asset.entity';
-import { PortfolioValue } from 'src/portfolio_value/entities/portfolio_value.entity';
+import { PortfolioValue } from '../../portfolio_value/entities/portfolio_value.entity';
 
 @Entity()
 export class Portfolio {

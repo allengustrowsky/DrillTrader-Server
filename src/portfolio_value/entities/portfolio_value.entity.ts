@@ -1,10 +1,10 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { CreatePortfolioValueDto } from '../dto/create-portfolio_value.dto';
+import { Portfolio } from '../../portfolio/entities/portfolio.entity';
 
 @Entity()
 export class PortfolioValue {
     constructor(createPortfolioValueDto: CreatePortfolioValueDto) {
-        this.portfolio_id = createPortfolioValueDto.portfolio_id
         this.value = createPortfolioValueDto.value
     }
 
@@ -13,10 +13,6 @@ export class PortfolioValue {
     })
     readonly id!: number;
 
-    // TODO: FK referencing portfolio
-    @Property()
-    portfolio_id!: number;
-
     @Property()
     value!: number;
 
@@ -24,4 +20,7 @@ export class PortfolioValue {
         type: "datetime"
     })
     created_at: Date = new Date()
+
+    @ManyToOne(() => Portfolio)
+    portfolio!: Portfolio;
 }

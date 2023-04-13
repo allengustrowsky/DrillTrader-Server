@@ -1,13 +1,13 @@
-import { Entity, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { create } from 'domain';
 import { CreatePortfolioDto } from 'src/portfolio/dto/create-portfolio.dto';
 import { CreateTransactionDto } from '../dto/create-transaction.dto';
+import { Asset } from '../../asset/entities/asset.entity';
+import { Portfolio } from '../../portfolio/entities/portfolio.entity';
 
 @Entity()
 export class Transaction {
     constructor(createTransactionDto: CreateTransactionDto) {
-        this.portfolio_id = createTransactionDto.portfolio_id
-        this.asset_id = createTransactionDto.asset_id
         this.units = createTransactionDto.units
         this.price = createTransactionDto.price
         this.is_buy = createTransactionDto.is_buy
@@ -17,14 +17,6 @@ export class Transaction {
         autoincrement: true,
     })
     readonly id!: number;
-
-    // TODO: FK referencing portfolio
-    @Property()
-    portfolio_id!: number;
-
-    // TODO: FK referencing asset
-    @Property()
-    asset_id!: number;
 
     @Property()
     units!: number;
@@ -39,4 +31,10 @@ export class Transaction {
         type: "datetime"
     })
     created_at: Date = new Date()
+
+    @ManyToOne(() => Asset)
+    asset!: Asset;
+
+    @ManyToOne(() => Portfolio)
+    portfolio!: Portfolio;
 }

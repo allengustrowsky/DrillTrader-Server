@@ -13,6 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiAuthGuard } from 'src/auth/auth.guard';
+import { IsAdminGuard } from 'src/auth/admin.guard';
 
 @ApiTags('User')
 @Controller('user')
@@ -24,6 +25,7 @@ export class UserController {
         return this.userService.create(createUserDto);
     }
 
+    @UseGuards(IsAdminGuard)
     @UseGuards(ApiAuthGuard)
     @Get()
     findAll() {

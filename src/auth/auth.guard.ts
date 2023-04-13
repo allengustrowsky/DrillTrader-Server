@@ -1,10 +1,12 @@
 import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable, UnauthorizedException, } from "@nestjs/common";
-import { Request } from "express";
-import { Observable } from "rxjs";
 import { User } from "src/user/entities/user.entity";
 import { EntityManager } from '@mikro-orm/mysql';
 
 // adapted from nestjs documentation on implementing an authentication guard
+/**
+ * Ensures user submits a valid apiKey, and if so then attaches the user to 
+ * the request object.
+ */
 @Injectable()
 export class ApiAuthGuard implements CanActivate  {
     constructor(private readonly em: EntityManager) {}

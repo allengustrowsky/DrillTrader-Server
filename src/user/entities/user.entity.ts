@@ -47,6 +47,6 @@ export class User {
     })
     created_at: Date = new Date()
 
-    @OneToOne(() => Portfolio, portfolio => portfolio.user, { owner: true })
+    @OneToOne(() => Portfolio, portfolio => portfolio.user)
     portfolio!: Portfolio;
 }

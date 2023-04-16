@@ -1,4 +1,4 @@
-import { Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Cascade, Collection, Entity, OneToMany, OneToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { CreatePortfolioDto } from '../dto/create-portfolio.dto';
 import { User } from '../../user/entities/user.entity';
 import { Transaction } from '../../transaction/entities/transaction.entity';
@@ -14,7 +14,7 @@ export class Portfolio {
     })
     readonly id!: number;
 
-    @OneToOne(() => User, user => user.portfolio)
+    @OneToOne(() => User, user => user.portfolio, { cascade: [Cascade.REMOVE], owner: true } )
     user!: User;
 
     @OneToMany(() => Transaction, transaction => transaction.portfolio)

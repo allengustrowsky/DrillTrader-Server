@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, Cascade, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { create } from 'domain';
 import { CreatePortfolioDto } from 'src/portfolio/dto/create-portfolio.dto';
 import { CreateTransactionDto } from '../dto/create-transaction.dto';
@@ -32,9 +32,9 @@ export class Transaction {
     })
     created_at: Date = new Date()
 
-    @ManyToOne(() => Asset)
+    @ManyToOne(() => Asset, { cascade: [Cascade.PERSIST] })
     asset!: Asset;
 
-    @ManyToOne(() => Portfolio)
+    @ManyToOne(() => Portfolio, { cascade: [Cascade.PERSIST] })
     portfolio!: Portfolio;
 }

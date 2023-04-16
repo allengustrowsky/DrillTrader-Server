@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import { Cascade, Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
 import { CreatePortfolioValueDto } from '../dto/create-portfolio_value.dto';
 import { Portfolio } from '../../portfolio/entities/portfolio.entity';
 
@@ -21,6 +21,6 @@ export class PortfolioValue {
     })
     created_at: Date = new Date()
 
-    @ManyToOne(() => Portfolio)
+    @ManyToOne(() => Portfolio, { cascade: [Cascade.REMOVE] })
     portfolio!: Portfolio;
 }

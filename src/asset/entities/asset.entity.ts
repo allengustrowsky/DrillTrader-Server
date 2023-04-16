@@ -1,4 +1,4 @@
-import { Collection, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import { Collection, Cascade, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { CreateAssetDto } from '../dto/create-asset.dto';
 import { AssetType } from '../../asset_type/entities/asset_type.entity';
 import { Transaction } from '../../transaction/entities/transaction.entity';
@@ -26,7 +26,7 @@ export class Asset {
     })
     ticker_symbol!: string;
 
-    @ManyToOne(() => AssetType)
+    @ManyToOne(() => AssetType, { cascade: [Cascade.PERSIST] })
     asset_type?: AssetType;
 
     @OneToMany(() => Transaction, transaction => transaction.asset)

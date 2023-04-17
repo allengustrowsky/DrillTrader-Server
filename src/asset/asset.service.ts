@@ -1,5 +1,5 @@
 import { EntityManager } from '@mikro-orm/mysql';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAssetDto } from './dto/create-asset.dto';
 import { UpdateAssetDto } from './dto/update-asset.dto';
 import { Asset } from './entities/asset.entity';
@@ -14,7 +14,7 @@ export class AssetService {
         const asset = new Asset({name: createAssetDto.name, ticker_symbol: createAssetDto.ticker_symbol});
         const asset_type = await this.em.findOne(AssetType, createAssetDto.asset_type_id);
         if (!asset_type) {
-            throw new HttpException(`AssetType with id ${createAssetDto.asset_type_id} not found.`, HttpStatus.BAD_REQUEST);
+            throw new HttpException(`Asset with id ${createAssetDto.asset_type_id} not found.`, HttpStatus.BAD_REQUEST);
         } else {
             asset.asset_type = asset_type
         }
@@ -31,13 +31,17 @@ export class AssetService {
         }
     }
 
-    findAll() {
-        // return this.em.find(id)
-        return `This action returns all asset`;
+    async findAll() {
+        const assets = await this.em.find(Asset, {});
+        return assets;
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} asset`;
+    async findOne(id: number) {
+        const asset = await this.em.findOne(Asset, id);
+        if (!asset) {
+            throw new NotFoundException(`Asset with id ${id} not found`);
+        }
+        return asset;
     }
 
     update(id: number, updateAssetDto: UpdateAssetDto) {

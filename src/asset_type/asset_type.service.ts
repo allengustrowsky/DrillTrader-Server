@@ -34,7 +34,7 @@ export class AssetTypeService {
     async findOne(id: number) {
         const assetType = await this.em.findOne(AssetType, id)
         if (!assetType) {
-            throw new NotFoundException(`AssetType with id ${id} not found`)
+            throw new NotFoundException(`AssetType with id ${id} not found`);
         }
         return assetType
     }
@@ -43,7 +43,13 @@ export class AssetTypeService {
         return `This action updates a #${id} assetType`;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} assetType`;
+    async remove(id: number) {
+        const assetType = await this.em.findOne(AssetType, id);
+        if (assetType) {
+            await this.em.remove(assetType).flush()
+            return assetType;
+        } else {
+            throw new NotFoundException(`AssetType with id ${id} not found`);
+        }
     }
 }

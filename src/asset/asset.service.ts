@@ -45,7 +45,36 @@ export class AssetService {
     }
 
     async update(id: number, updateAssetDto: UpdateAssetDto) {
-        return `This action updates a #${id} asset`;
+        const asset = await this.em.findOne(Asset, id);
+        if (!asset) {
+            throw new NotFoundException(`Asset with id ${id} not found.`);
+        }
+
+        
+        if (updateAssetDto.name) {
+            asset.name = updateAssetDto.name;
+        }
+        if (updateAssetDto.asset_type_id) {
+            const assetType = await this.em.findOne(AssetType, updateAssetDto.asset_type_id)
+            if (!assetType) {
+                throw new HttpException(`Asset with id ${updateAssetDto.asset_type_id} not found.`, HttpStatus.BAD_REQUEST)
+            }
+            asset.asset_type = assetType
+        }
+        if (updateAssetDto.ticker_symbol) {
+            asset.ticker_symbol = updateAssetDto.ticker_symbol
+        }
+
+        try {
+            await this.em.persistAndFlush(asset);
+            return asset
+        } catch (e) {
+            if (e instanceof UniqueConstraintViolationException) {
+                throw new HttpException("One of these values is already taken.", HttpStatus.BAD_REQUEST)
+            } else {
+                throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
+            }
+        }
     }
 
     async remove(id: number) {

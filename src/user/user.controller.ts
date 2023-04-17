@@ -13,7 +13,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiBadRequestResponse, ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { ApiAuthGuard } from 'src/auth/auth.guard';
 import { IsAdminGuard } from 'src/auth/admin.guard';
 import { RemovePortfilioPropsInterceptor } from '../interceptors/user.interceptor';
@@ -42,7 +42,7 @@ export class UserController {
 
     @UseGuards(ApiAuthGuard)
     @Get(':id')
-    @ApiOkResponse({ description: 'Successfully returned resources.' })
+    @ApiOkResponse({ description: 'Successfully returned resource.' })
     @ApiNotFoundResponse({ description: 'Resource not found.' })
     findOne(@Param('id') id: string) {
         return this.userService.findOne(+id);
@@ -51,7 +51,7 @@ export class UserController {
     @UseGuards(ApiAuthGuard)
     @Patch(':id')
     @ApiOkResponse({ description: 'Successfully updated resource.' })
-    @ApiNotFoundResponse({ description: 'Usere with given id not found' })
+    @ApiNotFoundResponse({ description: 'User with this id not found' })
     @ApiForbiddenResponse({ description: 'Not allowed to modify this resource.' })
     @ApiConflictResponse({ description: 'User with this email already taken.' })
     @ApiInternalServerErrorResponse({ description: 'An internal server error occurred.' }) 

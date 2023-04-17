@@ -44,11 +44,17 @@ export class AssetService {
         return asset;
     }
 
-    update(id: number, updateAssetDto: UpdateAssetDto) {
+    async update(id: number, updateAssetDto: UpdateAssetDto) {
         return `This action updates a #${id} asset`;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} asset`;
+    async remove(id: number) {
+        const asset = await this.em.findOne(Asset, id);
+        if (asset) {
+            await this.em.remove(asset).flush()
+            return asset;
+        } else {
+            throw new NotFoundException(`Asset with id ${id} not found`);
+        }
     }
 }

@@ -4,6 +4,7 @@ import { EntityManager } from '@mikro-orm/mysql';
 import { Portfolio } from './portfolio/entities/portfolio.entity';
 import { Asset } from './asset/entities/asset.entity';
 import { AssetType } from './asset_type/entities/asset_type.entity';
+import { CreateAssetDto } from './asset/dto/create-asset.dto';
 
 @Injectable()
 export class AppService {
@@ -47,6 +48,31 @@ export class AppService {
             name: "Cash"
         })
         await this.em.persistAndFlush(a2);
+
+        // AAPL stock
+        const aa1 = new Asset({
+            name: 'Apple', 
+            ticker_symbol: 'AAPL'
+        })
+        aa1.asset_type = a1;
+        await this.em.persistAndFlush(aa1)
+
+        // KO stock
+        const aa2 = new Asset({
+            name: 'Coca-Cola Company', 
+            ticker_symbol: 'KO'
+        })
+        aa2.asset_type = a1;
+        await this.em.persistAndFlush(aa2)
+
+        // Cash asset
+        const aa3 = new Asset({
+            name: 'Cash',
+            ticker_symbol: '$'
+        })
+        aa3.asset_type = a2;
+        await this.em.persistAndFlush(aa3);
+
 
         return {
             apiKey: user1.apiKey,

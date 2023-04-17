@@ -20,9 +20,9 @@ export class UserService {
             await this.em.persistAndFlush(portfolio);
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
-                throw new HttpException("Email must be unique.", HttpStatus.BAD_REQUEST)
+                throw new HttpException("Email must be unique.", HttpStatus.CONFLICT)
             } else {
-                throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
+                throw new HttpException("An internal server error occurred.", HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
 
@@ -50,7 +50,7 @@ export class UserService {
 
         const isAuthorized = user.id === (request as any).user || (request as any).user.is_admin
         if (!isAuthorized) {
-            throw new HttpException('You are not allowed to modify this user!', HttpStatus.UNAUTHORIZED);
+            throw new HttpException('You are not allowed to modify this user!', HttpStatus.FORBIDDEN);
         }
 
         if (updateUserDto.first_name) {
@@ -67,9 +67,9 @@ export class UserService {
             await this.em.persistAndFlush(user);
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
-                throw new HttpException("This email has already been taken.", HttpStatus.BAD_REQUEST)
+                throw new HttpException("This email has already been taken.", HttpStatus.CONFLICT)
             } else {
-                throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
+                throw new HttpException("An internal server error occurred!", HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
 
@@ -83,7 +83,7 @@ export class UserService {
             await this.em.remove(user).flush();
             return user;
         } else {
-            throw new HttpException(`User with id ${id} does not exist!`, HttpStatus.BAD_REQUEST);
+            throw new NotFoundException(`User with id ${id} does not exist!`);
         }
     }
 }

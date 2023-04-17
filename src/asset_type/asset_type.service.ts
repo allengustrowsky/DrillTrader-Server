@@ -1,9 +1,10 @@
 import { EntityManager } from '@mikro-orm/mysql';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAssetTypeDto } from './dto/create-asset_type.dto';
 import { UpdateAssetTypeDto } from './dto/update-asset_type.dto';
 import { AssetType } from './entities/asset_type.entity';
 import { UniqueConstraintViolationException } from '@mikro-orm/core';
+import { Asset } from 'src/asset/entities/asset.entity';
 
 @Injectable()
 export class AssetTypeService {
@@ -25,12 +26,17 @@ export class AssetTypeService {
         return assetType;
     }
 
-    findAll() {
-        return `This action returns all assetType`;
+    async findAll() {
+        const assetTypes = await this.em.find(AssetType, {})
+        return assetTypes;
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} assetType`;
+    async findOne(id: number) {
+        const assetType = await this.em.findOne(AssetType, id)
+        if (!assetType) {
+            throw new NotFoundException(`AssetType with id ${id} not found`)
+        }
+        return assetType
     }
 
     update(id: number, updateAssetTypeDto: UpdateAssetTypeDto) {

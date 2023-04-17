@@ -37,7 +37,7 @@ export class UserService {
     async findOne(id: number) {
         const user = await this.em.findOne(User, id)
         if (!user) {
-            throw new NotFoundException()
+            throw new NotFoundException(`User with id ${id} not found.`)
         }
         return user
     }
@@ -45,7 +45,7 @@ export class UserService {
     async update(id: number, updateUserDto: UpdateUserDto, request: Request) {
         let user = await this.em.findOne(User, id);
         if (!user) {
-            throw new NotFoundException();
+            throw new NotFoundException(`User with id ${id} not found.`)
         }
 
         const isAuthorized = user.id === (request as any).user || (request as any).user.is_admin

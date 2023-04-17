@@ -4,9 +4,11 @@ import { AssetType } from '../../asset_type/entities/asset_type.entity';
 import { Transaction } from '../../transaction/entities/transaction.entity';
 import { PortfolioAsset } from '../../portfolio_asset/entities/portfolio_asset.entity';
 
+interface PartialAssetDTO {name: string, ticker_symbol: string}
+
 @Entity()
 export class Asset {
-    constructor(createAssetDto: CreateAssetDto) {
+    constructor(createAssetDto: PartialAssetDTO) {
         this.name = createAssetDto.name
         this.ticker_symbol = createAssetDto.ticker_symbol
     }
@@ -18,11 +20,13 @@ export class Asset {
 
     @Property({
         length: 64,
+        unique: true,
     })
     name!: string;
 
     @Property({
         length: 16,
+        unique: true,
     })
     ticker_symbol!: string;
 

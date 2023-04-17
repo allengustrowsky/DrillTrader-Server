@@ -7,6 +7,7 @@ import {
     Param,
     Delete,
     UseGuards,
+    UseInterceptors,
 } from '@nestjs/common';
 import { AssetService } from './asset.service';
 import { CreateAssetDto } from './dto/create-asset.dto';
@@ -14,12 +15,14 @@ import { UpdateAssetDto } from './dto/update-asset.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiAuthGuard } from 'src/auth/auth.guard';
 import { IsAdminGuard } from 'src/auth/admin.guard';
+import { RemoveAssetPTInterceptor } from 'src/interceptors/asset.interceptor';
 
 @ApiTags('Asset')
 @Controller('asset')
 export class AssetController {
     constructor(private readonly assetService: AssetService) {}
 
+    @UseInterceptors(RemoveAssetPTInterceptor)
     @UseGuards(IsAdminGuard)
     @UseGuards(ApiAuthGuard)
     @Post()

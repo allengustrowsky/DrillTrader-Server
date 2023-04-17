@@ -8,8 +8,8 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
 
     const config = new DocumentBuilder()
-        .setTitle('Demo API')
-        .setDescription('A Demo API with CRUD functionality')
+        .setTitle('MyStock')
+        .setDescription('A mock-stock-trading platform that allows users to trade common stocks at live prices.')
         .setVersion('1.0')
         .build();
     const document = SwaggerModule.createDocument(app, config);

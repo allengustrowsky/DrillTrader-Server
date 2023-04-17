@@ -39,8 +39,24 @@ export class AssetTypeService {
         return assetType
     }
 
-    update(id: number, updateAssetTypeDto: UpdateAssetTypeDto) {
-        return `This action updates a #${id} assetType`;
+    async update(id: number, updateAssetTypeDto: UpdateAssetTypeDto) {
+        const assetType = await this.em.findOne(AssetType, id);
+        if (!assetType) {
+            throw new NotFoundException(`AssetType with id ${id} not found`);
+        }
+        assetType.name = updateAssetTypeDto.name;
+
+        try {
+            await this.em.persistAndFlush(assetType)
+        } catch (e) {
+            if (e instanceof UniqueConstraintViolationException) {
+                throw new HttpException("This name has already been taken.", HttpStatus.BAD_REQUEST)
+            } else {
+                throw new HttpException("An error occurred!", HttpStatus.CONFLICT) 
+            }
+        }
+
+        return assetType;
     }
 
     async remove(id: number) {

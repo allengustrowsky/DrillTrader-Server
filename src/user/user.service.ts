@@ -43,7 +43,7 @@ export class UserService {
     }
 
     async update(id: number, updateUserDto: UpdateUserDto, request: Request) {
-        let user = await this.em.findOne(User, id);
+        const user = await this.em.findOne(User, id);
         if (!user) {
             throw new NotFoundException(`User with id ${id} not found.`)
         }

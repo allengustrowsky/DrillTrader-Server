@@ -8,6 +8,7 @@ import {
     Delete,
     UseGuards,
     UseInterceptors,
+    Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -43,8 +44,8 @@ export class UserController {
 
     @UseGuards(ApiAuthGuard)
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-        return this.userService.update(+id, updateUserDto);
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @Req() request: Request) {
+        return this.userService.update(+id, updateUserDto, request);
     }
 
     @UseGuards(IsAdminGuard)

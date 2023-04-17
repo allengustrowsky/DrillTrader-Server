@@ -20,7 +20,7 @@ export class UserService {
             await this.em.persistAndFlush(portfolio);
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
-                throw new HttpException("Email must be unique", HttpStatus.BAD_REQUEST)
+                throw new HttpException("Email must be unique.", HttpStatus.BAD_REQUEST)
             } else {
                 throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
             }
@@ -42,8 +42,38 @@ export class UserService {
         return user
     }
 
-    update(id: number, updateUserDto: UpdateUserDto) {
-        return `This action updates a #${id} user`;
+    async update(id: number, updateUserDto: UpdateUserDto, request: Request) {
+        let user = await this.em.findOne(User, id);
+        if (!user) {
+            throw new NotFoundException();
+        }
+
+        const isAuthorized = user.id === (request as any).user || (request as any).user.is_admin
+        if (!isAuthorized) {
+            throw new HttpException('You are not allowed to modify this user!', HttpStatus.UNAUTHORIZED);
+        }
+
+        if (updateUserDto.first_name) {
+            user.first_name = updateUserDto.first_name
+        }
+        if (updateUserDto.last_name) {
+            user.last_name = updateUserDto.last_name
+        }
+        if (updateUserDto.email_address) {
+            user.email_address = updateUserDto.email_address
+        }
+
+        try {
+            await this.em.persistAndFlush(user);
+        } catch (e) {
+            if (e instanceof UniqueConstraintViolationException) {
+                throw new HttpException("This email has already been taken.", HttpStatus.BAD_REQUEST)
+            } else {
+                throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
+            }
+        }
+
+        return user;
     }
 
     async remove(id: number) {

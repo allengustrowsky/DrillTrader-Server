@@ -13,12 +13,13 @@ export class AppService {
         return 'Hello World!';
     }
 
-    async setup(): Promise<string> {
+    async setup(): Promise<{apiKey: string, nonAdmin: string}> {
         const user1 = new User({
             first_name: "Allen",
             last_name: "Gustrowsky",
             email_address: "allen@may21.us"
         })
+        user1.is_admin = true;
         await this.em.persistAndFlush(user1);
         const p1 = new Portfolio()
         p1.user = user1;
@@ -39,6 +40,9 @@ export class AppService {
         })
         await this.em.persistAndFlush(a1);
 
-        return 'Success'
+        return {
+            apiKey: user1.apiKey,
+            nonAdmin: user2.apiKey
+        }
     }
 }

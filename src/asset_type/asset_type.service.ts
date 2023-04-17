@@ -17,9 +17,9 @@ export class AssetTypeService {
             await this.em.persistAndFlush(assetType);
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
-                throw new HttpException("Name must be unique.", HttpStatus.BAD_REQUEST)
+                throw new HttpException("Name must be unique.", HttpStatus.CONFLICT)
             } else {
-                throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
+                throw new HttpException("An error occurred!", HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
 
@@ -50,9 +50,9 @@ export class AssetTypeService {
             await this.em.persistAndFlush(assetType)
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
-                throw new HttpException("This name has already been taken.", HttpStatus.BAD_REQUEST)
+                throw new HttpException("This name has already been taken.", HttpStatus.CONFLICT)
             } else {
-                throw new HttpException("An error occurred!", HttpStatus.CONFLICT) 
+                throw new HttpException("An error occurred!", HttpStatus.INTERNAL_SERVER_ERROR) 
             }
         }
 

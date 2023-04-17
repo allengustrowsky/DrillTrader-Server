@@ -14,6 +14,7 @@ export class AppService {
     }
 
     async setup(): Promise<{apiKey: string, nonAdmin: string}> {
+        // add admin user
         const user1 = new User({
             first_name: "Allen",
             last_name: "Gustrowsky",
@@ -25,6 +26,7 @@ export class AppService {
         p1.user = user1;
         await this.em.persistAndFlush(p1)
 
+        // add second user
         const user2 = new User({
             first_name: "Brandon",
             last_name: "Gustrowsky",
@@ -35,10 +37,16 @@ export class AppService {
         p2.user = user2;
         await this.em.persistAndFlush(p2)
 
+        // add stock asset type
         const a1 = new AssetType({
             name: "Stock"
         })
         await this.em.persistAndFlush(a1);
+        // add cash asset type
+        const a2 = new AssetType({
+            name: "Cash"
+        })
+        await this.em.persistAndFlush(a2);
 
         return {
             apiKey: user1.apiKey,

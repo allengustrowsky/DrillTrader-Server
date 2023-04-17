@@ -1,15 +1,15 @@
 import {
     Controller,
     Get,
-    Post,
-    Body,
-    Patch,
+    // Post,
+    // Body,
+    // Patch,
     Param,
     Delete,
 } from '@nestjs/common';
 import { PortfolioService } from './portfolio.service';
-import { CreatePortfolioDto } from './dto/create-portfolio.dto';
-import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
+// import { CreatePortfolioDto } from './dto/create-portfolio.dto';
+// import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 /**

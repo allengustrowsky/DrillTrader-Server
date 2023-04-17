@@ -14,7 +14,7 @@ export class AssetService {
         const asset = new Asset({name: createAssetDto.name, ticker_symbol: createAssetDto.ticker_symbol});
         const asset_type = await this.em.findOne(AssetType, createAssetDto.asset_type_id);
         if (!asset_type) {
-            throw new HttpException(`Asset with id ${createAssetDto.asset_type_id} not found.`, HttpStatus.BAD_REQUEST);
+            throw new HttpException(`Asset with id ${createAssetDto.asset_type_id} not found.`, HttpStatus.NOT_FOUND);
         } else {
             asset.asset_type = asset_type
         }
@@ -24,9 +24,9 @@ export class AssetService {
             return asset;
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
-                throw new HttpException("Name and ticker symbol must be unique.", HttpStatus.BAD_REQUEST)
+                throw new HttpException("Name and ticker symbol must be unique.", HttpStatus.CONFLICT)
             } else {
-                throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
+                throw new HttpException("An error occurred!", HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
     }
@@ -57,7 +57,7 @@ export class AssetService {
         if (updateAssetDto.asset_type_id) {
             const assetType = await this.em.findOne(AssetType, updateAssetDto.asset_type_id)
             if (!assetType) {
-                throw new HttpException(`Asset with id ${updateAssetDto.asset_type_id} not found.`, HttpStatus.BAD_REQUEST)
+                throw new HttpException(`Asset type with id ${updateAssetDto.asset_type_id} not found.`, HttpStatus.NOT_FOUND)
             }
             asset.asset_type = assetType
         }
@@ -70,9 +70,9 @@ export class AssetService {
             return asset
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
-                throw new HttpException("One of these values is already taken.", HttpStatus.BAD_REQUEST)
+                throw new HttpException("One of these values is already taken.", HttpStatus.CONFLICT)
             } else {
-                throw new HttpException("An error occurred!", HttpStatus.CONFLICT)
+                throw new HttpException("An error occurred!", HttpStatus.INTERNAL_SERVER_ERROR)
             }
         }
     }

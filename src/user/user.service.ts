@@ -48,7 +48,7 @@ export class UserService {
             throw new NotFoundException(`User with id ${id} not found.`)
         }
 
-        const isAuthorized = user.id === (request as any).user || (request as any).user.is_admin
+        const isAuthorized = user.id === (request as any).user.id || (request as any).user.is_admin
         if (!isAuthorized) {
             throw new HttpException('You are not allowed to modify this user!', HttpStatus.FORBIDDEN);
         }

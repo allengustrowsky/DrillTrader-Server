@@ -6,11 +6,15 @@ import {
     // Patch,
     Param,
     Delete,
+    UseGuards,
+    Req,
 } from '@nestjs/common';
 import { PortfolioService } from './portfolio.service';
 // import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 // import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
-import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiForbiddenResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiAuthGuard } from 'src/auth/auth.guard';
+import { IsAdminGuard } from 'src/auth/admin.guard';
 
 /**
  * This route should not be used often. With the way portfolios are 
@@ -30,17 +34,21 @@ export class PortfolioController {
     //     return this.portfolioService.create(createPortfolioDto);
     // }
 
+    @UseGuards(IsAdminGuard)
+    @UseGuards(ApiAuthGuard)
     @Get()
     @ApiOkResponse({ description: 'Successfully returned resources.' })
     findAll() {
         return this.portfolioService.findAll();
     }
 
+    @UseGuards(ApiAuthGuard)
     @Get(':id')
     @ApiOkResponse({ description: 'Successfully returned resource.' })
     @ApiNotFoundResponse({ description: 'Portfolio with this id not found.' })
-    findOne(@Param('id') id: string) {
-        return this.portfolioService.findOne(+id);
+    @ApiForbiddenResponse({ description: 'You are not allowed to access this portfolio.' })
+    findOne(@Param('id') id: string, @Req() request: Request) {
+        return this.portfolioService.findOne(+id, request);
     }
 
     // @Patch(':id')
@@ -51,6 +59,8 @@ export class PortfolioController {
     //     return this.portfolioService.update(+id, updatePortfolioDto);
     // }
 
+    @UseGuards(IsAdminGuard)
+    @UseGuards(ApiAuthGuard)
     @Delete(':id')
     @ApiOkResponse({ description: 'Successfully deleted resource.' })
     @ApiNotFoundResponse({ description: 'Portfolio with this id not found.' })

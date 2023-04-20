@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './user/entities/user.entity';
 import { EntityManager } from '@mikro-orm/mysql';
 import { Portfolio } from './portfolio/entities/portfolio.entity';
 import { Asset } from './asset/entities/asset.entity';
 import { AssetType } from './asset_type/entities/asset_type.entity';
 import { CreateAssetDto } from './asset/dto/create-asset.dto';
+
 
 @Injectable()
 export class AppService {
@@ -48,22 +49,15 @@ export class AppService {
             name: "Cash"
         })
         await this.em.persistAndFlush(a2);
-
-        // AAPL stock
-        const aa1 = new Asset({
-            name: 'Apple', 
-            ticker_symbol: 'AAPL'
+        // add index fund asset type
+        const a3 = new AssetType({
+            name: "Index Fund"
         })
-        aa1.asset_type = a1;
-        await this.em.persistAndFlush(aa1)
+        await this.em.persistAndFlush(a3);
 
-        // KO stock
-        const aa2 = new Asset({
-            name: 'Coca-Cola Company', 
-            ticker_symbol: 'KO'
-        })
-        aa2.asset_type = a1;
-        await this.em.persistAndFlush(aa2)
+        ///////////////////////////////////////////////////
+        ///////////////// Add cash asset ////////////////
+        ///////////////////////////////////////////////////
 
         // Cash asset
         const aa3 = new Asset({
@@ -72,6 +66,126 @@ export class AppService {
         })
         aa3.asset_type = a2;
         await this.em.persistAndFlush(aa3);
+
+        ///////////////////////////////////////////////////
+        ///////////////// Add stock assets ////////////////
+        ///////////////////////////////////////////////////
+
+        // Procter & Gamble Co. (PG)
+        const aa4 = new Asset({
+            name: 'Procter & Gamble Co.', 
+            ticker_symbol: 'PG'
+        })
+        aa4.asset_type = a1;
+        await this.em.persistAndFlush(aa4)
+        
+        // Mastercard Inc. (MA)
+        const aa5 = new Asset({
+            name: 'Mastercard Inc.', 
+            ticker_symbol: 'MA'
+        })
+        aa5.asset_type = a1;
+        await this.em.persistAndFlush(aa5)
+
+        // Amazon.com Inc. (AMZN)
+        const aa6 = new Asset({
+            name: 'Amazon.com Inc.', 
+            ticker_symbol: 'AMZN'
+        })
+        aa6.asset_type = a1;
+        await this.em.persistAndFlush(aa6)
+
+        // Microsoft Corporation (MSFT)
+        const aa7 = new Asset({
+            name: 'Microsoft Corporation', 
+            ticker_symbol: 'MSFT'
+        })
+        aa7.asset_type = a1;
+        await this.em.persistAndFlush(aa7)
+
+        // Berkshire Hathaway Inc. (BRK.A)
+        const aa8 = new Asset({
+            name: 'Berkshire Hathaway Inc.', 
+            ticker_symbol: 'BRK.A'
+        })
+        aa8.asset_type = a1;
+        await this.em.persistAndFlush(aa8)
+
+        // Alphabet Inc. (GOOGL)
+        const aa9 = new Asset({
+            name: 'Alphabet Inc.', 
+            ticker_symbol: 'GOOGL'
+        })
+        aa9.asset_type = a1;
+        await this.em.persistAndFlush(aa9)
+
+        // Tesla Inc. (TSLA)
+        const aa10 = new Asset({
+            name: 'Tesla Inc.', 
+            ticker_symbol: 'TSLA'
+        })
+        aa10.asset_type = a1;
+        await this.em.persistAndFlush(aa10)
+
+        // Coca-Cola Co. (KO)
+        const aa11 = new Asset({
+            name: 'Coca-Cola Co.', 
+            ticker_symbol: 'KO'
+        })
+        aa11.asset_type = a1;
+        await this.em.persistAndFlush(aa11)
+
+        // JPMorgan Chase & Co. (JPM)
+        const aa12 = new Asset({
+            name: 'JPMorgan Chase & Co.', 
+            ticker_symbol: 'JPM'
+        })
+        aa12.asset_type = a1;
+        await this.em.persistAndFlush(aa12)
+
+        // Exxon Mobil Corporation (XOM)
+        const aa13 = new Asset({
+            name: 'Exxon Mobil Corporation', 
+            ticker_symbol: 'XOM'
+        })
+        aa13.asset_type = a1;
+        await this.em.persistAndFlush(aa13)
+
+        // AAPL stock
+        const aa1 = new Asset({
+            name: 'Apple Inc.', 
+            ticker_symbol: 'AAPL'
+        })
+        aa1.asset_type = a1;
+        await this.em.persistAndFlush(aa1)
+
+        ///////////////////////////////////////////////////
+        ///////////////// Add index fund assets ///////////
+        ///////////////////////////////////////////////////
+        const aa14 = new Asset({
+            name: 'Vanguard Total Stock Market ETF', 
+            ticker_symbol: 'VTI'
+        })
+        aa14.asset_type = a3;
+        await this.em.persistAndFlush(aa14)
+
+        // Dow Jones
+        const aa15 = new Asset({
+            name: 'SPDR Dow Jones Industrial Average ETF Trust', 
+            ticker_symbol: 'DIA'
+        })
+        aa15.asset_type = a3;
+        await this.em.persistAndFlush(aa15)
+
+        // S&P 500
+        const aa16 = new Asset({
+            name: 'SPDR S&P 500 ETF Trust', 
+            ticker_symbol: 'SPY'
+        })
+        aa16.asset_type = a3;
+        await this.em.persistAndFlush(aa16)
+
+
 
 
         return {

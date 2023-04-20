@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional, Min } from 'class-validator';
 
 export class CreatePortfolioAssetDto {
     @ApiProperty({
@@ -24,5 +24,7 @@ export class CreatePortfolioAssetDto {
     })
     @IsNumber({ allowNaN: false })
     @IsOptional()
+    // credit to chatGPT for idea of using @Min() with @IsNumber() validator
+    @Min(0)
     units: number;
 }

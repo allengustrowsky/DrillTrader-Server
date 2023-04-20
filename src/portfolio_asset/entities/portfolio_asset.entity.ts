@@ -14,7 +14,12 @@ export class PortfolioAsset {
     })
     readonly id!: number;
 
-    @Property()
+    // setting precision and type credit to https://www.kindacode.com/snippet/typeorm-entity-with-decimal-data-type/
+    @Property({
+        type: 'decimal',
+        precision: 16,
+        scale: 2
+    })
     units: number = 0;
 
     @ManyToOne(() => Asset, { cascade: [Cascade.PERSIST] })

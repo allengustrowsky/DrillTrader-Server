@@ -13,7 +13,12 @@ export class PortfolioValue {
     })
     readonly id!: number;
 
-    @Property()
+    // setting precision and type credit to https://www.kindacode.com/snippet/typeorm-entity-with-decimal-data-type/
+    @Property({
+        type: 'decimal',
+        precision: 16,
+        scale: 2
+    })
     value!: number;
 
     @Property({

@@ -18,3 +18,6 @@
 
 ## Limitations
     - Avoid buying many units of stock (e.g., millions) in a single transaction
+
+## Credits:
+    - Some credits may be mentioned in a single location and are duplicated elsewhere without citation, but they are cited at least once. Others are cited everywhere they are used. My apologies for the inconsistency.

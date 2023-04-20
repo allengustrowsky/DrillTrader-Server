@@ -9,7 +9,6 @@ import { Portfolio } from '../../portfolio/entities/portfolio.entity';
 export class Transaction {
     constructor(createTransactionDto: CreateTransactionDto) {
         this.units = createTransactionDto.units
-        this.price = createTransactionDto.price
         this.is_buy = createTransactionDto.is_buy
     }
     

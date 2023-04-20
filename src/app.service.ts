@@ -5,6 +5,7 @@ import { Portfolio } from './portfolio/entities/portfolio.entity';
 import { Asset } from './asset/entities/asset.entity';
 import { AssetType } from './asset_type/entities/asset_type.entity';
 import { CreateAssetDto } from './asset/dto/create-asset.dto';
+import { PortfolioAsset } from './portfolio_asset/entities/portfolio_asset.entity';
 
 
 @Injectable()
@@ -184,6 +185,29 @@ export class AppService {
         })
         aa16.asset_type = a3;
         await this.em.persistAndFlush(aa16)
+
+
+        ///////////////////////////////////////////////////
+        ///////////////// create portfolio assets ///////////
+        ///////////////////////////////////////////////////
+        const pa1 = new PortfolioAsset({
+            portfolio_id: 2, // p2
+            asset_id: 2, //mastercard, aa5
+            units: 12.03
+        })
+        pa1.portfolio = p2 // user 2
+        pa1.asset = aa5; // mastercard
+        await this.em.persistAndFlush(pa1)
+
+        const pa2 = new PortfolioAsset({
+            portfolio_id: 2, // p2
+            asset_id: 8, // KO
+            units: 7.91
+        })
+        pa2.portfolio = p2 // user 2
+        pa2.asset = aa11; // KO
+        await this.em.persistAndFlush(pa2)
+
 
 
 

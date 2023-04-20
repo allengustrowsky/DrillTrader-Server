@@ -6,7 +6,7 @@ import { IsInt, IsOptional, IsString } from 'class-validator';
 export class UpdateAssetDto {
     @ApiPropertyOptional({
         type: String,
-        description: 'This is a required property',
+        description: 'This is an optional property',
     })
     @IsOptional()
     @IsString()
@@ -14,7 +14,7 @@ export class UpdateAssetDto {
 
     @ApiPropertyOptional({
         type: Number,
-        description: 'This is a required property',
+        description: 'This is an optional property',
     })
     @IsOptional()
     @IsInt()
@@ -22,7 +22,7 @@ export class UpdateAssetDto {
 
     @ApiPropertyOptional({
         type: String,
-        description: 'This is a required property',
+        description: 'This is an optional property',
     })
     @IsOptional()
     @IsString()

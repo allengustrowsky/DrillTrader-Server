@@ -65,6 +65,8 @@ export class PortfolioController {
     @ApiOkResponse({ description: 'Successfully deleted resource.' })
     @ApiNotFoundResponse({ description: 'Portfolio with this id not found.' })
     remove(@Param('id') id: string) {
+        // Warning: It is highly advised to NOT DELETE these. It will likely ruin 
+        // the logic for the rest of the user's account.
         return this.portfolioService.remove(+id);
     }
 }

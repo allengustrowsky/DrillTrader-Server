@@ -36,15 +36,6 @@ export class CreateTransactionDto {
     units: number;
 
     @ApiProperty({
-        type: Number,
-        description: 'This is a required property',
-    })
-    @IsNotEmpty()
-    @IsNumber({ allowNaN: false })
-    @IsPositive()
-    price: number;
-
-    @ApiProperty({
         type: Boolean,
         description: 'This is a required property',
     })

@@ -32,7 +32,7 @@ export class Transaction {
         precision: 10,
         scale: 2
     })
-    price!: number;
+    price_per_unit?: number;
 
     @Property()
     is_buy!: boolean;

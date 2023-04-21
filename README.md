@@ -16,6 +16,9 @@
     - SPDR Dow Jones Industrial Average ETF Trust (DIA)
     - SPDR S&P 500 ETF Trust (SPY)
 
+## Setup
+    - Need to sign up at (Finnhub Stock Api)[https://finnhub.io/] to get an apiKey and put "STOCK_API_KEY=yourApiKey" in the .env files
+
 ## Limitations
     - Avoid buying many units of stock (e.g., millions) in a single transaction
 

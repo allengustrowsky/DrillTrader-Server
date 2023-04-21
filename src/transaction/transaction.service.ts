@@ -5,6 +5,7 @@ import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { Asset } from 'src/asset/entities/asset.entity';
 import { PortfolioAsset } from 'src/portfolio_asset/entities/portfolio_asset.entity';
 import { Transaction } from './entities/transaction.entity';
+import { transcode } from 'buffer';
 
 @Injectable()
 export class TransactionService {
@@ -23,13 +24,28 @@ export class TransactionService {
             throw new HttpException(`Asset with id ${createTransactionDto.asset_id} does not exist.`, HttpStatus.NOT_FOUND)
         }
 
+        // handle cash deposit/widhtrawal
         if (validAsset.name === 'Cash') {
             const transaction = await this.handleCashTransaction(createTransactionDto, validAsset, request)
         }
-                
 
-        return 'This action adds a new transaction';
-        // return transaction
+        // make sure user has some cash before transaction
+        const cashTemp = await this.em.findOne(Asset, {name: 'Cash'})
+        const cashPortAsset = await this.em.findOne(PortfolioAsset, {
+            portfolio: (request as any).user.portfolio.id,
+            asset: cashTemp?.id
+        })
+        if (!cashPortAsset) {
+            throw new HttpException('No cash for this transaction.', HttpStatus.BAD_REQUEST)
+        }
+
+        // handle normal asset buy/sell
+        if (createTransactionDto.is_buy) {
+            return this.handleNormalBuy(createTransactionDto, validAsset, cashPortAsset, request)
+        } else {
+            return this.handleNormalSell(createTransactionDto)
+        }
+        
     }
 
     findAll(id: number, limit: number) {
@@ -109,4 +125,62 @@ export class TransactionService {
         }
     }
 
+    // reference for finnhub api response:
+        // c: Current price
+        // d: Change
+        // dp: Percent change
+        // h: High price of the day
+        // l: Low price of the day
+        // o: Open price of the day
+        // pc: Previous close price
+
+    async handleNormalBuy(createTransactionDto: CreateTransactionDto, validAsset: Asset, cashPortAsset: PortfolioAsset, request: Request) {
+        const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${validAsset.ticker_symbol}`, {
+            headers: {
+                "X-Finnhub-Token": process.env.STOCK_API_KEY || '0'
+            }
+        })
+        const assetData = await response.json()
+        if (assetData.error) { // handle rate limit reached
+            // credit to ChatGPT for telling me to return a 429 code here
+            throw new HttpException('API limit reached. Please wait a for a minute to continue using the API.', HttpStatus.TOO_MANY_REQUESTS)
+        }
+
+        const cashRequired = +(assetData.c) * (+createTransactionDto.units)
+        if (+cashPortAsset.units < cashRequired) { // user does not have enough cash
+            throw new HttpException('You do not have enough cash to make this transaction.', HttpStatus.BAD_REQUEST)
+        }
+
+        let portfolioAsset = await this.em.findOne(PortfolioAsset, {
+            portfolio: (request as any).user.portfolio.id, 
+            asset: createTransactionDto.asset_id
+        })
+        if (portfolioAsset) { // if portfolio asset exists, update it
+            portfolioAsset.units = +portfolioAsset.units + (+createTransactionDto.units)
+        } else { // doesn't exist, so initialize one
+            portfolioAsset = new PortfolioAsset({
+                portfolio_id: 0,
+                asset_id: 0,
+                units: +createTransactionDto.units
+            })
+            portfolioAsset.portfolio = (request as any).user.portfolio
+            portfolioAsset.asset = validAsset
+        }
+        cashPortAsset.units = +(cashPortAsset.units) - (+createTransactionDto.units * (+assetData.c))
+        const transaction = new Transaction(createTransactionDto)
+        transaction.asset = validAsset
+        transaction.portfolio = (request as any).user.portfolio
+        transaction.price_per_unit = +assetData.c
+
+        this.em.persist(portfolioAsset)
+        this.em.persist(cashPortAsset)
+        this.em.persist(transaction)
+        await this.em.flush()
+
+        return transaction
+    }
+
+    handleNormalSell(createTransactionDto: CreateTransactionDto) {
+        return new Transaction(createTransactionDto)
+    }
 }

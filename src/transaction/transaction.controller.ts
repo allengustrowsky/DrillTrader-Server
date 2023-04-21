@@ -28,15 +28,15 @@ export class TransactionController {
     }
 
     @UseGuards(ApiAuthGuard)
-    @Get('/:id/:limit')
+    @Get('/:id/:limit') // userid
     findAll(@Param('id') id: string, @Param('limit') limit: string, @Req() request: Request) {
         return this.transactionService.findAllUser(+id, +limit, request);
     }
 
     @UseGuards(ApiAuthGuard)
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.transactionService.findOne(+id);
+    @Get(':id') // single transaction id
+    findOne(@Param('id') id: string, @Req() request: Request) {
+        return this.transactionService.findOne(+id, request);
     }
 
     // @UseGuards(ApiAuthGuard)
@@ -48,10 +48,10 @@ export class TransactionController {
     //     return this.transactionService.update(+id, updateTransactionDto);
     // }
 
-    @UseGuards(IsAdminGuard)
-    @UseGuards(ApiAuthGuard)
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.transactionService.remove(+id);
-    }
+    // @UseGuards(IsAdminGuard)
+    // @UseGuards(ApiAuthGuard)
+    // @Delete(':id')
+    // remove(@Param('id') id: string) {
+    //     return this.transactionService.remove(+id);
+    // }
 }

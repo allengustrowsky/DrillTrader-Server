@@ -58,19 +58,67 @@ export class TransactionService {
         // return transactions
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} transaction`;
+    async findOne(id: number, request: Request) {
+        const transaction = await this.em.findOne(Transaction, id);
+        if (!transaction) {
+            throw new HttpException(`Transaction with id ${id} not found.`, HttpStatus.NOT_FOUND)
+        }
+
+        // make sure user can manage portfolio
+        const isAuthorized = transaction.portfolio.id === (request as any).user.portfolio.id || (request as any).user.is_admin
+        if (!isAuthorized) {
+            throw new HttpException('You are not allowed to access this user\' transactions.', HttpStatus.FORBIDDEN);
+        }
+
+        return transaction;
     }
 
-    update(id: number, updateTransactionDto: UpdateTransactionDto) {
-        // ehh, drop this probably.  Why would we need it?
-        return `This action updates a #${id} transaction`;
-    }
+    // update(id: number, updateTransactionDto: UpdateTransactionDto) {
+    //     return `This action updates a #${id} transaction`;
+    // }
 
-    remove(id: number) {
-        // delete transaction, disperse cash back to cash balance
-        return `This action removes a #${id} transaction`;
-    }
+    // Note: this method should work for deleting buy, non-cash transactions.  However, 
+    // if the transaction was a sell or was a cash transaction, it may not work properly. 
+    // Due to the complexity if implementing this method and the amount of use it would
+    // receive, it has been disabled.
+    // async remove(id: number) {
+    //     // delete transaction, disperse cash back to cash balance
+    //     const transaction = await this.em.findOne(Transaction, id);
+    //     if (!transaction) {
+    //         throw new HttpException(`Transaction with id ${id} not found.`, HttpStatus.NOT_FOUND)
+    //     }
+
+    //     // increase user's cash balance
+    //     const cashAsset = await this.em.findOne(Asset, {name: 'Cash'})
+    //     if (!cashAsset) {
+    //         throw new HttpException('If you are reading this message as a client then something really bad happened.', HttpStatus.INTERNAL_SERVER_ERROR)
+    //     }
+    //     // (need cash portfolio_asset)
+    //     const cashPortAsset = await this.em.findOne(PortfolioAsset, {portfolio: transaction.portfolio.id, asset: cashAsset.id})
+    //     if (!cashPortAsset) {
+    //         throw new HttpException('User has not deposited any cash onto their account, so this transaction cannot be deleted.', HttpStatus.BAD_REQUEST)
+    //     }
+    //     cashPortAsset.units = +cashPortAsset.units + (+transaction.units * +(transaction.price_per_unit ?? 1))
+        
+    //     // decrease portoflio asset of this type
+    //     const delPortAsset = await this.em.findOne(PortfolioAsset, {asset: transaction.asset.id})
+    //     if (!delPortAsset) {
+    //         throw new HttpException('User has does not have any record of owning this asset, so this transaction cannot be deleted.', HttpStatus.BAD_REQUEST)
+    //     }
+    //     // make sure units don't go below 0. 
+    //     const newUnits = +delPortAsset.units - (+transaction.units)
+    //     if (newUnits < 0) {
+    //         throw new HttpException(`You do not have enough of the ${delPortAsset.asset.name} to be fully refunded for this transaction, so it cannot be deleted.`, HttpStatus.CONFLICT)
+    //     }
+    //     delPortAsset.units = newUnits;
+ 
+    //     this.em.remove(transaction)
+    //     this.em.persist(cashPortAsset)
+    //     this.em.persist(delPortAsset)
+    //     this.em.flush()
+
+    //     return transaction
+    // }
 
     async handleCashTransaction(createTransactionDto: CreateTransactionDto, cashAsset: Asset, request: Request): Promise<Transaction> {
         const cashPortAsset = await this.em.findOne(PortfolioAsset, {portfolio: createTransactionDto.portfolio_id, asset: cashAsset})

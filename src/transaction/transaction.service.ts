@@ -15,7 +15,7 @@ export class TransactionService {
         // make sure user can manage portfolio
         const isAuthorized =  createTransactionDto.portfolio_id === (request as any).user.portfolio.id || (request as any).user.is_admin
         if (!isAuthorized) {
-            throw new HttpException('You are not allowed to access this portfolio!', HttpStatus.FORBIDDEN);
+            throw new HttpException('You are not allowed to access this portfolio.', HttpStatus.FORBIDDEN);
         }
 
         // make sure asset is valid
@@ -47,9 +47,16 @@ export class TransactionService {
         }
     }
 
-    findAll(id: number, limit: number) {
+    async findAllUser(id: number, limit: number, request: Request) {
+        // make sure user can manage portfolio
+        const isAuthorized = id === (request as any).user.id || (request as any).user.is_admin
+        if (!isAuthorized) {
+            throw new HttpException('You are not allowed to access this user\' transactions.', HttpStatus.FORBIDDEN);
+        }
+
         // order by date
-        return `This action returns all transaction`;
+        return await this.em.find(Transaction, {portfolio: id}, {limit, orderBy: { created_at: 'desc' } })
+        // return transactions
     }
 
     findOne(id: number) {

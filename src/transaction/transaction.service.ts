@@ -43,9 +43,8 @@ export class TransactionService {
         if (createTransactionDto.is_buy) {
             return this.handleNormalBuy(createTransactionDto, validAsset, cashPortAsset, request)
         } else {
-            return this.handleNormalSell(createTransactionDto)
+            return this.handleNormalSell(createTransactionDto, validAsset, cashPortAsset, request)
         }
-        
     }
 
     findAll(id: number, limit: number) {
@@ -135,6 +134,7 @@ export class TransactionService {
         // pc: Previous close price
 
     async handleNormalBuy(createTransactionDto: CreateTransactionDto, validAsset: Asset, cashPortAsset: PortfolioAsset, request: Request) {
+        // get live stock data
         const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${validAsset.ticker_symbol}`, {
             headers: {
                 "X-Finnhub-Token": process.env.STOCK_API_KEY || '0'
@@ -180,7 +180,43 @@ export class TransactionService {
         return transaction
     }
 
-    handleNormalSell(createTransactionDto: CreateTransactionDto) {
-        return new Transaction(createTransactionDto)
+    async handleNormalSell(createTransactionDto: CreateTransactionDto, validAsset: Asset, cashPortAsset: PortfolioAsset, request: Request) {
+        // make sure there are enough portfolio_asset units to sell that
+        let portfolioAsset = await this.em.findOne(PortfolioAsset, {
+            portfolio: (request as any).user.portfolio.id, 
+            asset: createTransactionDto.asset_id
+        })
+        if (!portfolioAsset) {
+            throw new HttpException('You do not have any units of this asset to sell.', HttpStatus.BAD_REQUEST)
+        }
+        if (+portfolioAsset.units < (+createTransactionDto.units)) {
+            throw new HttpException('You do not have enough units of this asset to sell.', HttpStatus.BAD_REQUEST)
+        }
+
+        // get live stock data
+        const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${validAsset.ticker_symbol}`, {
+            headers: {
+                "X-Finnhub-Token": process.env.STOCK_API_KEY || '0'
+            }
+        })
+        const assetData = await response.json()
+        if (assetData.error) { // handle rate limit reached
+            // credit to ChatGPT for telling me to return a 429 code here
+            throw new HttpException('API limit reached. Please wait a for a minute to continue using the API.', HttpStatus.TOO_MANY_REQUESTS)
+        }
+
+        portfolioAsset.units = +portfolioAsset.units - (+createTransactionDto.units)
+        cashPortAsset.units = +cashPortAsset.units + (+createTransactionDto.units * assetData.c)
+        const transaction = new Transaction(createTransactionDto)
+        transaction.asset = validAsset
+        transaction.portfolio = (request as any).user.portfolio
+        transaction.price_per_unit = +assetData.c
+
+        this.em.persist(portfolioAsset)
+        this.em.persist(cashPortAsset)
+        this.em.persist(transaction)
+        await this.em.flush()
+
+        return transaction
     }
 }

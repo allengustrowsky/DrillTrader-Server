@@ -9,6 +9,8 @@ import { PortfolioModule } from './portfolio/portfolio.module';
 import { PortfolioAssetModule } from './portfolio_asset/portfolio_asset.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { PortfolioValueModule } from './portfolio_value/portfolio_value.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { PortfolioValueLogger } from './cron/portfolio_value_logger_cron.service';
 
 @Module({
     imports: [
@@ -20,8 +22,9 @@ import { PortfolioValueModule } from './portfolio_value/portfolio_value.module';
         PortfolioAssetModule,
         TransactionModule,
         PortfolioValueModule,
+        ScheduleModule.forRoot()
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, PortfolioValueLogger],
 })
 export class AppModule {}

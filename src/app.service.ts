@@ -208,8 +208,42 @@ export class AppService {
         pa2.asset = aa11; // KO
         await this.em.persistAndFlush(pa2)
 
+        const pa3 = new PortfolioAsset({
+            portfolio_id: 2, // p2
+            asset_id: 8, // KO
+            units: 7.91
+        })
+        pa3.portfolio = p2 // user 2
+        pa3.asset = aa3; // Cash
+        await this.em.persistAndFlush(pa3)
 
+        
+        const pa5 = new PortfolioAsset({
+            portfolio_id: 2, // p2
+            asset_id: 2, //mastercard, aa5
+            units: 12.03
+        })
+        pa5.portfolio = p1 // user 1
+        pa5.asset = aa5; // mastercard
+        await this.em.persistAndFlush(pa5)
 
+        const pa6 = new PortfolioAsset({
+            portfolio_id: 2, // p2
+            asset_id: 8, // KO
+            units: 7.91
+        })
+        pa6.portfolio = p1 // user 1
+        pa6.asset = aa11; // KO
+        await this.em.persistAndFlush(pa6)
+
+        const pa4 = new PortfolioAsset({
+            portfolio_id: 2, // p2
+            asset_id: 8, // KO (ignore)
+            units: 7.91
+        })
+        pa4.portfolio = p1 // user 1
+        pa4.asset = aa3; // Cash
+        await this.em.persistAndFlush(pa4)
 
 
         return {

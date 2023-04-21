@@ -26,7 +26,7 @@ export class TransactionService {
 
         // handle cash deposit/widhtrawal
         if (validAsset.name === 'Cash') {
-            const transaction = await this.handleCashTransaction(createTransactionDto, validAsset, request)
+            return await this.handleCashTransaction(createTransactionDto, validAsset, request)
         }
 
         // make sure user has some cash before transaction
@@ -41,9 +41,9 @@ export class TransactionService {
 
         // handle normal asset buy/sell
         if (createTransactionDto.is_buy) {
-            return this.handleNormalBuy(createTransactionDto, validAsset, cashPortAsset, request)
+            return await this.handleNormalBuy(createTransactionDto, validAsset, cashPortAsset, request)
         } else {
-            return this.handleNormalSell(createTransactionDto, validAsset, cashPortAsset, request)
+            return await this.handleNormalSell(createTransactionDto, validAsset, cashPortAsset, request)
         }
     }
 
@@ -54,7 +54,6 @@ export class TransactionService {
             throw new HttpException('You are not allowed to access this user\' transactions.', HttpStatus.FORBIDDEN);
         }
 
-        // order by date
         return await this.em.find(Transaction, {portfolio: id}, {limit, orderBy: { created_at: 'desc' } })
         // return transactions
     }
@@ -140,7 +139,7 @@ export class TransactionService {
         // o: Open price of the day
         // pc: Previous close price
 
-    async handleNormalBuy(createTransactionDto: CreateTransactionDto, validAsset: Asset, cashPortAsset: PortfolioAsset, request: Request) {
+    async handleNormalBuy(createTransactionDto: CreateTransactionDto, validAsset: Asset, cashPortAsset: PortfolioAsset, request: Request): Promise<Transaction> {
         // get live stock data
         const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${validAsset.ticker_symbol}`, {
             headers: {
@@ -187,7 +186,7 @@ export class TransactionService {
         return transaction
     }
 
-    async handleNormalSell(createTransactionDto: CreateTransactionDto, validAsset: Asset, cashPortAsset: PortfolioAsset, request: Request) {
+    async handleNormalSell(createTransactionDto: CreateTransactionDto, validAsset: Asset, cashPortAsset: PortfolioAsset, request: Request): Promise<Transaction> {
         // make sure there are enough portfolio_asset units to sell that
         let portfolioAsset = await this.em.findOne(PortfolioAsset, {
             portfolio: (request as any).user.portfolio.id, 

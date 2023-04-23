@@ -1,6 +1,5 @@
 import { EntityManager } from '@mikro-orm/mysql';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-// import { WebSocketClient } from '@finnhub/websocket';
 import * as WebSocket from 'ws'; // thanks to ChatGPT from helping me tweak this import so the ws constructor works
 const finnhub = require('finnhub');
 
@@ -30,28 +29,6 @@ type AssetUpdate = {
 // any code marked with "TLPU" is almost entirely from finnhub api "Trades - Last Price Updates" https://finnhub.io/docs/api/websocket-trades
 @Injectable()
 export class LivePriceDataService {
-    static livePrices = {
-        // 
-    }
-
-    // static callableAssets: {[key: string]: string} = {
-    //     "Procter & Gamble Co.": "PG",
-    //     "Mastercard Inc.": "MA",
-    //     "Amazon.com Inc.": "AMZN",
-    //     "Microsoft Corporation": "MSFT",
-    //     "Berkshire Hathaway Inc.": "BRK.A",
-    //     "Alphabet Inc.": "GOOGL",
-    //     "Tesla Inc.": "TSLA",
-    //     "Coca-Cola Co.": "KO",
-    //     "JPMorgan Chase & Co.": "JPM",
-    //     "Exxon Mobil Corporation": "XOM",
-    //     "Apple Inc.": "AAPL",
-    //     "Vanguard Total Stock Market ETF": "VTI",
-    //     "SPDR Dow Jones Industrial Average ETF Trust": "DIA",
-    //     "SPDR S&P 500 ETF Trust": "SPY",
-    //     "Binance BTCUSDT [TEST]": "BINANCE:BTCUSDT"
-    // }
-
     // static callableAssets: {[key: string]: string} = {
     static callableAssets: AssetList = {
         "PG": {
@@ -142,18 +119,12 @@ export class LivePriceDataService {
         socket.addEventListener('open', function (event) {
             console.log('Initializing websocket connections...')
             for (let symbolIdx of Object.keys(LivePriceDataService.callableAssets)) {
-                // console.log(`${i}: symbol: ${LivePriceDataService.callableAssets[i].name}; currentPrice: ${LivePriceDataService.callableAssets[i].currentPrice}; time: ${LivePriceDataService.callableAssets[i].time}`)                
-                // console.log(LivePriceDataService.callableAssets[symbolIdx].name)
                 socket.send(JSON.stringify({
                     'type':'subscribe', 
                     'symbol': symbolIdx
                 }))
                 console.log(`Initialized websocket connection for ${symbolIdx}`)
             }
-            
-            // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AAPL'}))
-            // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'}))
-            // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'IC MARKETS:1'}))
         });
 
         socket.addEventListener('message', function (event) { // TLPU
@@ -164,8 +135,6 @@ export class LivePriceDataService {
                     const asset = LivePriceDataService.callableAssets[data.data[idx]['s'] as string]
                     asset.currentPrice = data.data[idx]['p'] as number
                     asset.time = data.data[idx]['t'] as number
-                    // console.log('updated idx: ')
-                    // console.dir(LivePriceDataService.callableAssets[data.data[idx]['s'] as string])
                 }
             }
         });
@@ -176,29 +145,12 @@ export class LivePriceDataService {
             socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
         }
 
-        // from ChatGPT
-        // const websocket = new WebSocketClient('wss://ws.finnhub.io?token=cgio5rhr01qmhsekoj3gcgio5rhr01qmhsekoj40');
-
-        // // Subscribe to the 'AAPL' stock symbol
-        // websocket.subscribe('AAPL', (data: any) => {
-        //     console.log('AAPL price update:', data);
-        // });
-
-        // // Subscribe to the 'BINANCE:BTCUSDT' crypto symbol
-        // websocket.subscribe('BINANCE:BTCUSDT', (data) => {
-        //     console.log('BTCUSDT price update:', data);
-        // });
-
-        // // Subscribe to the 'IC MARKETS:1' forex symbol
-        // websocket.subscribe('IC MARKETS:1', (data) => {
-        //     console.log('Forex price update:', data);
-        // });
-
-        // // Unsubscribe from the 'AAPL' stock symbol
-        // websocket.unsubscribe('AAPL');
         this.setData()
     }
 
+    /**
+     * Sets the initial data in the live prices object 
+     */
     async setData() {
         for (let symbolIdx of Object.keys(LivePriceDataService.callableAssets)) {
             try {
@@ -207,15 +159,11 @@ export class LivePriceDataService {
                         'X-Finnhub-Token': process.env.STOCK_API_KEY as string
                     }
                 })
-                // console.log(response)
                 const data = await response.json()
                 if (!data.error) { // if api minute rate limit not reached
                     const asset = LivePriceDataService.callableAssets[symbolIdx]
-                    // console.log('before asset: ')
-                    // console.dir(asset)
                     asset.currentPrice = data.c
                     asset.time = data.t * 1000 // add in milliseconds to match others (going to be just 0's, so not precise)
-                    // console.log('after asset: ')
                 } else {
                     console.log('Api rate limit reached. Quotes my be inaccurate initially.')
                 }
@@ -226,45 +174,4 @@ export class LivePriceDataService {
 
         }
     }
-
-    // make a static object that has any number of properties to accomodate shift in resources
-    
-    // const 
-    
 }
-
-// // any code marked with "TLPU" is almost entirely from finnhub api "Trades - Last Price Updates" https://finnhub.io/docs/api/websocket-trades
-// @Injectable()
-// export class LivePriceDataService {
-//     static livePrices = {
-//         // 
-//     }
-
-//     constructor(private readonly em: EntityManager) {
-//         // TLPU
-//         const socket = new WebSocket('wss://ws.finnhub.io?token=cgio5rhr01qmhsekoj3gcgio5rhr01qmhsekoj40');
-
-//         // Connection opened -> Subscribe
-//         socket.addEventListener('open', function (event) {
-//             socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AAPL'}))
-//             socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'BINANCE:BTCUSDT'}))
-//             socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'IC MARKETS:1'}))
-//         });
-
-//         // Listen for messages
-//         socket.addEventListener('message', function (event) {
-//             console.log('Message from server ', event.data);
-//         });
-
-//         // Unsubscribe
-//         const unsubscribe = (symbol: string) => {
-//             socket.send(JSON.stringify({'type':'unsubscribe','symbol': symbol}))
-//         }
-
-//     }
-
-//     // make a static object that has any number of properties to accomodate shift in resources
-    
-//     // const 
-    
-// }

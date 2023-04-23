@@ -1,7 +1,8 @@
 import { EntityManager } from '@mikro-orm/mysql';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 // import { WebSocketClient } from '@finnhub/websocket';
 import * as WebSocket from 'ws'; // thanks to ChatGPT from helping me tweak this import so the ws constructor works
+const finnhub = require('finnhub');
 
 // key/value pair typing to fix TS error credit: Jonas Wilms from https://stackoverflow.com/questions/57350092/string-cant-be-used-to-index-type
 export interface AssetList {
@@ -120,7 +121,7 @@ export class LivePriceDataService {
         },
         "SPY": {
             name: "SPDR S&P 500 ETF Trust",
-            currentPrice: 0,
+            currentPrice: 412.2,
             time: new Date().getTime()
         },
         "BINANCE:BTCUSDT": {
@@ -195,7 +196,28 @@ export class LivePriceDataService {
 
         // // Unsubscribe from the 'AAPL' stock symbol
         // websocket.unsubscribe('AAPL');
+        this.setData()
+    }
 
+    async setData() {
+        for (let symbolIdx of Object.keys(LivePriceDataService.callableAssets)) {
+            const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbolIdx}`, {
+                headers: {
+                    'X-Finnhub-Token': process.env.STOCK_API_KEY as string
+                }
+            })
+            const data = await response.json()
+            if (!data.error) { // if api minute rate limit not reached
+                const asset = LivePriceDataService.callableAssets[symbolIdx]
+                // console.log('before asset: ')
+                // console.dir(asset)
+                asset.currentPrice = data.c
+                asset.time = data.t * 1000 // add in milliseconds to match others (going to be just 0's, so not precise)
+                // console.log('after asset: ')
+            } else {
+                console.log('Api rate limit reached. Quotes my be inaccurate initially.')
+            }
+        }
     }
 
     // make a static object that has any number of properties to accomodate shift in resources

@@ -1,4 +1,10 @@
-import { Entity, Cascade, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+    Entity,
+    Cascade,
+    ManyToOne,
+    PrimaryKey,
+    Property,
+} from '@mikro-orm/core';
 import { create } from 'domain';
 import { CreatePortfolioDto } from 'src/portfolio/dto/create-portfolio.dto';
 import { CreateTransactionDto } from '../dto/create-transaction.dto';
@@ -8,10 +14,10 @@ import { Portfolio } from '../../portfolio/entities/portfolio.entity';
 @Entity()
 export class Transaction {
     constructor(createTransactionDto: CreateTransactionDto) {
-        this.units = createTransactionDto.units
-        this.is_buy = createTransactionDto.is_buy
+        this.units = createTransactionDto.units;
+        this.is_buy = createTransactionDto.is_buy;
     }
-    
+
     @PrimaryKey({
         autoincrement: true,
     })
@@ -21,7 +27,7 @@ export class Transaction {
     @Property({
         type: 'decimal',
         precision: 10,
-        scale: 2
+        scale: 2,
     })
     units!: number;
 
@@ -29,7 +35,7 @@ export class Transaction {
     @Property({
         type: 'decimal',
         precision: 10,
-        scale: 2
+        scale: 2,
     })
     price_per_unit?: number;
 
@@ -37,9 +43,9 @@ export class Transaction {
     is_buy!: boolean;
 
     @Property({
-        type: "datetime"
+        type: 'datetime',
     })
-    created_at: Date = new Date()
+    created_at: Date = new Date();
 
     @ManyToOne(() => Asset, { cascade: [Cascade.PERSIST] })
     asset!: Asset;

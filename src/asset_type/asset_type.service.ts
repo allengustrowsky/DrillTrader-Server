@@ -1,5 +1,10 @@
 import { EntityManager } from '@mikro-orm/mysql';
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    HttpException,
+    HttpStatus,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { CreateAssetTypeDto } from './dto/create-asset_type.dto';
 import { UpdateAssetTypeDto } from './dto/update-asset_type.dto';
 import { AssetType } from './entities/asset_type.entity';
@@ -17,9 +22,15 @@ export class AssetTypeService {
             await this.em.persistAndFlush(assetType);
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
-                throw new HttpException("Name must be unique.", HttpStatus.CONFLICT)
+                throw new HttpException(
+                    'Name must be unique.',
+                    HttpStatus.CONFLICT,
+                );
             } else {
-                throw new HttpException("An error occurred!", HttpStatus.INTERNAL_SERVER_ERROR)
+                throw new HttpException(
+                    'An error occurred!',
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                );
             }
         }
 
@@ -27,16 +38,16 @@ export class AssetTypeService {
     }
 
     async findAll() {
-        const assetTypes = await this.em.find(AssetType, {})
+        const assetTypes = await this.em.find(AssetType, {});
         return assetTypes;
     }
 
     async findOne(id: number) {
-        const assetType = await this.em.findOne(AssetType, id)
+        const assetType = await this.em.findOne(AssetType, id);
         if (!assetType) {
             throw new NotFoundException(`AssetType with id ${id} not found`);
         }
-        return assetType
+        return assetType;
     }
 
     async update(id: number, updateAssetTypeDto: UpdateAssetTypeDto) {
@@ -47,12 +58,18 @@ export class AssetTypeService {
         assetType.name = updateAssetTypeDto.name;
 
         try {
-            await this.em.persistAndFlush(assetType)
+            await this.em.persistAndFlush(assetType);
         } catch (e) {
             if (e instanceof UniqueConstraintViolationException) {
-                throw new HttpException("This name has already been taken.", HttpStatus.CONFLICT)
+                throw new HttpException(
+                    'This name has already been taken.',
+                    HttpStatus.CONFLICT,
+                );
             } else {
-                throw new HttpException("An error occurred!", HttpStatus.INTERNAL_SERVER_ERROR) 
+                throw new HttpException(
+                    'An error occurred!',
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                );
             }
         }
 
@@ -62,7 +79,7 @@ export class AssetTypeService {
     async remove(id: number) {
         const assetType = await this.em.findOne(AssetType, id);
         if (assetType) {
-            await this.em.remove(assetType).flush()
+            await this.em.remove(assetType).flush();
             return assetType;
         } else {
             throw new NotFoundException(`AssetType with id ${id} not found`);

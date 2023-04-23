@@ -9,7 +9,9 @@ async function bootstrap() {
 
     const config = new DocumentBuilder()
         .setTitle('MyStock')
-        .setDescription('A mock-stock-trading platform that allows users to trade common stocks at live prices.')
+        .setDescription(
+            'A mock-stock-trading platform that allows users to trade common stocks at live prices.',
+        )
         .setVersion('1.0')
         .build();
     const document = SwaggerModule.createDocument(app, config);

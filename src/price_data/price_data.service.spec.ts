@@ -2,17 +2,17 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PriceDataService } from './price_data.service';
 
 describe('PriceDataService', () => {
-  let service: PriceDataService;
+    let service: PriceDataService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [PriceDataService],
-    }).compile();
+    beforeEach(async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            providers: [PriceDataService],
+        }).compile();
 
-    service = module.get<PriceDataService>(PriceDataService);
-  });
+        service = module.get<PriceDataService>(PriceDataService);
+    });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+    it('should be defined', () => {
+        expect(service).toBeDefined();
+    });
 });

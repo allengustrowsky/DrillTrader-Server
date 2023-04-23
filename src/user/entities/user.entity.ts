@@ -1,4 +1,10 @@
-import { Entity, OneToOne, PrimaryKey, Property, Unique} from '@mikro-orm/core';
+import {
+    Entity,
+    OneToOne,
+    PrimaryKey,
+    Property,
+    Unique,
+} from '@mikro-orm/core';
 import { randomBytes } from 'crypto';
 import { create } from 'domain';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -7,9 +13,9 @@ import { Portfolio } from '../../portfolio/entities/portfolio.entity';
 @Entity()
 export class User {
     constructor(createUserDto: CreateUserDto) {
-        this.first_name = createUserDto.first_name
-        this.last_name = createUserDto.last_name
-        this.email_address = createUserDto.email_address
+        this.first_name = createUserDto.first_name;
+        this.last_name = createUserDto.last_name;
+        this.email_address = createUserDto.email_address;
     }
 
     @PrimaryKey({
@@ -43,10 +49,10 @@ export class User {
     is_admin?: boolean = false;
 
     @Property({
-        type: "datetime"
+        type: 'datetime',
     })
-    created_at: Date = new Date()
+    created_at: Date = new Date();
 
-    @OneToOne(() => Portfolio, portfolio => portfolio.user)
+    @OneToOne(() => Portfolio, (portfolio) => portfolio.user)
     portfolio!: Portfolio;
 }

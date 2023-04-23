@@ -1,11 +1,17 @@
-import { Cascade, Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+    Cascade,
+    Entity,
+    ManyToOne,
+    PrimaryKey,
+    Property,
+} from '@mikro-orm/core';
 import { CreatePortfolioValueDto } from '../dto/create-portfolio_value.dto';
 import { Portfolio } from '../../portfolio/entities/portfolio.entity';
 
 @Entity()
 export class PortfolioValue {
     constructor(createPortfolioValueDto: CreatePortfolioValueDto) {
-        this.value = createPortfolioValueDto.value
+        this.value = createPortfolioValueDto.value;
     }
 
     @PrimaryKey({
@@ -17,14 +23,14 @@ export class PortfolioValue {
     @Property({
         type: 'decimal',
         precision: 16,
-        scale: 2
+        scale: 2,
     })
     value!: number;
 
     @Property({
-        type: "datetime"
+        type: 'datetime',
     })
-    created_at: Date = new Date()
+    created_at: Date = new Date();
 
     @ManyToOne(() => Portfolio, { cascade: [Cascade.REMOVE] })
     portfolio!: Portfolio;

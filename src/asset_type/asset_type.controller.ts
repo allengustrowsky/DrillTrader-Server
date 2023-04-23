@@ -12,8 +12,14 @@ import {
 import { AssetTypeService } from './asset_type.service';
 import { CreateAssetTypeDto } from './dto/create-asset_type.dto';
 import { UpdateAssetTypeDto } from './dto/update-asset_type.dto';
-import { ApiConflictResponse, ApiInternalServerErrorResponse, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { RemoveAssetsFromTypeInterceptor } from '../interceptors/asset_type.interceptor'; 
+import {
+    ApiConflictResponse,
+    ApiInternalServerErrorResponse,
+    ApiNotFoundResponse,
+    ApiOkResponse,
+    ApiTags,
+} from '@nestjs/swagger';
+import { RemoveAssetsFromTypeInterceptor } from '../interceptors/asset_type.interceptor';
 import { ApiAuthGuard } from 'src/auth/auth.guard';
 import { IsAdminGuard } from 'src/auth/admin.guard';
 
@@ -25,8 +31,12 @@ export class AssetTypeController {
     @UseInterceptors(RemoveAssetsFromTypeInterceptor)
     @Post()
     @ApiOkResponse({ description: 'Asset type successfully created.' })
-    @ApiConflictResponse({ description: 'Asset type with this name already taken.' })
-    @ApiInternalServerErrorResponse({ description: 'An internal server error occured.' })
+    @ApiConflictResponse({
+        description: 'Asset type with this name already taken.',
+    })
+    @ApiInternalServerErrorResponse({
+        description: 'An internal server error occured.',
+    })
     create(@Body() createAssetTypeDto: CreateAssetTypeDto) {
         return this.assetTypeService.create(createAssetTypeDto);
     }
@@ -51,8 +61,12 @@ export class AssetTypeController {
     @Patch(':id')
     @ApiOkResponse({ description: 'Successfully updated resource.' })
     @ApiNotFoundResponse({ description: 'Asset type with this id not found.' })
-    @ApiConflictResponse({ description: 'Asset type with this name already taken.'})
-    @ApiInternalServerErrorResponse({ description: 'An internal server error occurred.' })
+    @ApiConflictResponse({
+        description: 'Asset type with this name already taken.',
+    })
+    @ApiInternalServerErrorResponse({
+        description: 'An internal server error occurred.',
+    })
     update(
         @Param('id') id: string,
         @Body() updateAssetTypeDto: UpdateAssetTypeDto,

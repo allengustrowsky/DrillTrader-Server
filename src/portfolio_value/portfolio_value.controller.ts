@@ -37,7 +37,10 @@ export class PortfolioValueController {
      */
     @UseGuards(ApiAuthGuard)
     @Get(':portfolioId')
-    findOne(@Param('portfolioId') portfolioId: string, @Req() request: Request) {
+    findOne(
+        @Param('portfolioId') portfolioId: string,
+        @Req() request: Request,
+    ) {
         return this.portfolioValueService.findOne(+portfolioId, request);
     }
 

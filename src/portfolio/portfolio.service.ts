@@ -1,5 +1,10 @@
 import { EntityManager } from '@mikro-orm/mysql';
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import {
+    HttpException,
+    HttpStatus,
+    Injectable,
+    NotFoundException,
+} from '@nestjs/common';
 import { CreatePortfolioDto } from './dto/create-portfolio.dto';
 import { UpdatePortfolioDto } from './dto/update-portfolio.dto';
 import { Portfolio } from './entities/portfolio.entity';
@@ -21,12 +26,17 @@ export class PortfolioService {
     async findOne(id: number, request: Request) {
         const portfolio = await this.em.findOne(Portfolio, id);
         if (!portfolio) {
-            throw new NotFoundException(`Portfolio with id ${id} not found.`)
+            throw new NotFoundException(`Portfolio with id ${id} not found.`);
         }
 
-        const isAuthorized = portfolio.user.id === (request as any).user.id || (request as any).user.is_admin
+        const isAuthorized =
+            portfolio.user.id === (request as any).user.id ||
+            (request as any).user.is_admin;
         if (!isAuthorized) {
-            throw new HttpException('You are not allowed to access this portfolio!', HttpStatus.FORBIDDEN);
+            throw new HttpException(
+                'You are not allowed to access this portfolio!',
+                HttpStatus.FORBIDDEN,
+            );
         }
 
         return portfolio;
@@ -39,8 +49,8 @@ export class PortfolioService {
     async remove(id: number) {
         const portfolio = await this.em.findOne(Portfolio, id);
         if (portfolio) {
-            await this.em.remove(portfolio).flush()
-            return portfolio
+            await this.em.remove(portfolio).flush();
+            return portfolio;
         } else {
             throw new NotFoundException(`Portfolio with id ${id} not found`);
         }

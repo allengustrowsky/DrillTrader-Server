@@ -1,16 +1,27 @@
-import { Collection, Cascade, Entity, ManyToOne, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import {
+    Collection,
+    Cascade,
+    Entity,
+    ManyToOne,
+    OneToMany,
+    PrimaryKey,
+    Property,
+} from '@mikro-orm/core';
 import { CreateAssetDto } from '../dto/create-asset.dto';
 import { AssetType } from '../../asset_type/entities/asset_type.entity';
 import { Transaction } from '../../transaction/entities/transaction.entity';
 import { PortfolioAsset } from '../../portfolio_asset/entities/portfolio_asset.entity';
 
-interface PartialAssetDTO {name: string, ticker_symbol: string}
+interface PartialAssetDTO {
+    name: string;
+    ticker_symbol: string;
+}
 
 @Entity()
 export class Asset {
     constructor(createAssetDto: PartialAssetDTO) {
-        this.name = createAssetDto.name
-        this.ticker_symbol = createAssetDto.ticker_symbol
+        this.name = createAssetDto.name;
+        this.ticker_symbol = createAssetDto.ticker_symbol;
     }
 
     @PrimaryKey({
@@ -33,9 +44,9 @@ export class Asset {
     @ManyToOne(() => AssetType, { cascade: [Cascade.PERSIST] })
     asset_type?: AssetType;
 
-    @OneToMany(() => Transaction, transaction => transaction.asset)
+    @OneToMany(() => Transaction, (transaction) => transaction.asset)
     transactions = new Collection<Transaction>(this);
 
-    @OneToMany(() => PortfolioAsset, portfolioAsset => portfolioAsset.asset)
+    @OneToMany(() => PortfolioAsset, (portfolioAsset) => portfolioAsset.asset)
     portfolio_assets = new Collection<PortfolioAsset>(this);
 }

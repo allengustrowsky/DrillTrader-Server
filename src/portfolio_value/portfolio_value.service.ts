@@ -14,26 +14,45 @@ export class PortfolioValueService {
 
     async findAll(userId: number, request: Request) {
         // make sure user can manage portfolio
-        const isAuthorized =  userId === (request as any).user.id || (request as any).user.is_admin
+        const isAuthorized =
+            userId === (request as any).user.id ||
+            (request as any).user.is_admin;
         if (!isAuthorized) {
-            throw new HttpException('You are not allowed to access the value of this user\'s portfolio.', HttpStatus.FORBIDDEN);
+            throw new HttpException(
+                "You are not allowed to access the value of this user's portfolio.",
+                HttpStatus.FORBIDDEN,
+            );
         }
 
-        const portfolioValues = await this.em.find(PortfolioValue, { portfolio: userId })
-        return portfolioValues
+        const portfolioValues = await this.em.find(PortfolioValue, {
+            portfolio: userId,
+        });
+        return portfolioValues;
     }
 
     async findOne(portfolioId: number, request: Request) {
-        const isAuthorized =  portfolioId === (request as any).user.id || (request as any).user.is_admin
+        const isAuthorized =
+            portfolioId === (request as any).user.id ||
+            (request as any).user.is_admin;
         if (!isAuthorized) {
-            throw new HttpException('You are not allowed to access this the value of this user\'s portfolio.', HttpStatus.FORBIDDEN);
+            throw new HttpException(
+                "You are not allowed to access this the value of this user's portfolio.",
+                HttpStatus.FORBIDDEN,
+            );
         }
 
-        const portValue = await this.em.find(PortfolioValue, {portfolio: portfolioId}, {limit: 1, orderBy: { created_at: 'desc' } })
+        const portValue = await this.em.find(
+            PortfolioValue,
+            { portfolio: portfolioId },
+            { limit: 1, orderBy: { created_at: 'desc' } },
+        );
         if (portValue.length > 0) {
-            return portValue[0]    
+            return portValue[0];
         } else {
-            throw new HttpException('No portfolio value has been recorded for this portfolio.', HttpStatus.BAD_REQUEST)
+            throw new HttpException(
+                'No portfolio value has been recorded for this portfolio.',
+                HttpStatus.BAD_REQUEST,
+            );
         }
     }
 

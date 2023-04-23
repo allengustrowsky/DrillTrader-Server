@@ -55,67 +55,67 @@ export class LivePriceDataService {
     static callableAssets: AssetList = {
         "PG": {
             name: "Procter & Gamble Co.",
-            currentPrice: 0,
+            currentPrice: 156.07,
             time: new Date().getTime() // convert date to UNIX timestamp credit to ChatGPT
         },
         "MA": {
             name: "Mastercard Inc.",
-            currentPrice: 0,
+            currentPrice: 25.155,
             time: new Date().getTime()
         },
         "AMZN": {
             name: "Amazon.com Inc.",
-            currentPrice: 0,
+            currentPrice: 106.96,
             time: new Date().getTime()
         },
         "MSFT": {
             name: "Microsoft Corporation",
-            currentPrice: 0,
+            currentPrice: 285.76,
             time: new Date().getTime()
         },
         "BRK.A": {
             name: "Berkshire Hathaway Inc.",
-            currentPrice: 0,
+            currentPrice: 496405,
             time: new Date().getTime()
         },
         "GOOGL": {
             name: "Alphabet Inc.",
-            currentPrice: 0,
+            currentPrice: 105.41,
             time: new Date().getTime()
         },
         "TSLA": {
             name: "Tesla Inc.",
-            currentPrice: 0,
+            currentPrice: 165.08,
             time: new Date().getTime()
         },
         "KO": {
             name: "Coca-Cola Co.",
-            currentPrice: 0,
+            currentPrice: 64.05,
             time: new Date().getTime()
         },
         "JPM": {
             name: "JPMorgan Chase & Co.",
-            currentPrice: 0,
+            currentPrice: 140.54,
             time: new Date().getTime()
         },
         "XOM": {
             name: "Exxon Mobil Corporation",
-            currentPrice: 0,
+            currentPrice: 116.01,
             time: new Date().getTime()
         },
         "AAPL": {
             name: "Apple Inc.",
-            currentPrice: 0,
+            currentPrice: 165.02,
             time: new Date().getTime()
         },
         "VTI": {
             name: "Vanguard Total Stock Market ETF",
-            currentPrice: 0,
+            currentPrice: 205,
             time: new Date().getTime()
         },
         "DIA": {
             name: "SPDR Dow Jones Industrial Average ETF Trust",
-            currentPrice: 0,
+            currentPrice: 338.11,
             time: new Date().getTime()
         },
         "SPY": {
@@ -124,8 +124,8 @@ export class LivePriceDataService {
             time: new Date().getTime()
         },
         "BINANCE:BTCUSDT": {
-            name: "Binance BTCUSDT [TEST]",
-            currentPrice: 0,
+            name: "Binance BTCUSDT",
+            currentPrice: 27654,
             time: new Date().getTime()
         },
     }
@@ -139,15 +139,15 @@ export class LivePriceDataService {
         // TLPU
         // Connection opened -> Subscribe
         socket.addEventListener('open', function (event) {
-            // CURRENT: for each callable assets, socket.send
+            console.log('Initializing websocket connections...')
             for (let symbolIdx of Object.keys(LivePriceDataService.callableAssets)) {
-                // console.log(`${i}: symbol: ${LivePriceDataService.callableAssets[i].name}; currentPrice: ${LivePriceDataService.callableAssets[i].currentPrice}; time: ${LivePriceDataService.callableAssets[i].time}`)
-                // console/
-                console.log(symbolIdx)
+                // console.log(`${i}: symbol: ${LivePriceDataService.callableAssets[i].name}; currentPrice: ${LivePriceDataService.callableAssets[i].currentPrice}; time: ${LivePriceDataService.callableAssets[i].time}`)                
+                // console.log(LivePriceDataService.callableAssets[symbolIdx].name)
                 socket.send(JSON.stringify({
                     'type':'subscribe', 
                     'symbol': symbolIdx
                 }))
+                console.log(`Initialized websocket connection for ${symbolIdx}`)
             }
             
             // socket.send(JSON.stringify({'type':'subscribe', 'symbol': 'AAPL'}))

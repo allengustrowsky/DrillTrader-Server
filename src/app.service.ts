@@ -6,6 +6,9 @@ import { Asset } from './asset/entities/asset.entity';
 import { AssetType } from './asset_type/entities/asset_type.entity';
 import { CreateAssetDto } from './asset/dto/create-asset.dto';
 import { PortfolioAsset } from './portfolio_asset/entities/portfolio_asset.entity';
+import { Transaction } from './transaction/entities/transaction.entity';
+import { LivePriceDataService } from './live_price_data/live_price_data.service';
+import { PortfolioValue } from './portfolio_value/entities/portfolio_value.entity';
 
 @Injectable()
 export class AppService {
@@ -253,6 +256,131 @@ export class AppService {
         pa4.portfolio = p1; // user 1
         pa4.asset = aa3; // Cash
         await this.em.persistAndFlush(pa4);
+
+        const pa7 = new PortfolioAsset({
+            portfolio_id: 2, // p2
+            asset_id: 8, // KO (ignore)
+            units: 13.5,
+        });
+        pa7.portfolio = p1; // user 1
+        pa7.asset = aa7; // Microsoft
+        await this.em.persistAndFlush(pa7);
+
+
+        ///////////////////////////////////////////////////
+        ///////////////// create transactions /////////////
+        ///////////////////////////////////////////////////
+        const t11 = new Transaction({
+            portfolio_id: 1, // user1
+            asset_id: 2,
+            units: 13.5,
+            is_buy: true
+        })
+        t11.portfolio = p1
+        t11.asset = aa7 //microsoft
+        t11.price_per_unit = LivePriceDataService.callableAssets['MSFT'].currentPrice
+        await this.em.persistAndFlush(t11)
+
+        const t12 = new Transaction({
+            portfolio_id: 1, // user1
+            asset_id: 2,
+            units: 12.03,
+            is_buy: true
+        })
+        t12.portfolio = p1
+        t12.asset = aa5 // mastecrard
+        t12.price_per_unit = LivePriceDataService.callableAssets['MA'].currentPrice
+        await this.em.persistAndFlush(t12)
+
+        const t13 = new Transaction({
+            portfolio_id: 1, // user1
+            asset_id: 2,
+            units: 7.91,
+            is_buy: true
+        })
+        t13.portfolio = p1
+        t13.asset = aa11 // coca cola
+        t13.price_per_unit = LivePriceDataService.callableAssets['KO'].currentPrice
+        await this.em.persistAndFlush(t13)
+
+        const t14 = new Transaction({
+            portfolio_id: 1, // user1
+            asset_id: 2,
+            units: 7.91,
+            is_buy: false
+        })
+        t14.portfolio = p1
+        t14.asset = aa3 // cash
+        t14.price_per_unit = 1
+        await this.em.persistAndFlush(t14)
+
+        // User 2 (nonadmin) transactions
+        const t15 = new Transaction({
+            portfolio_id: 2, // user2 
+            asset_id: 2,
+            units: 12.03,
+            is_buy: true
+        })
+        t15.portfolio = p2
+        t15.asset = aa5 // mastecrard
+        t15.price_per_unit = LivePriceDataService.callableAssets['MA'].currentPrice
+        await this.em.persistAndFlush(t15)
+
+        const t16 = new Transaction({
+            portfolio_id: 2, // user2
+            asset_id: 2,
+            units: 7.91,
+            is_buy: true
+        })
+        t16.portfolio = p2
+        t16.asset = aa11 // coca cola
+        t16.price_per_unit = LivePriceDataService.callableAssets['KO'].currentPrice
+        await this.em.persistAndFlush(t16)
+
+        const t17 = new Transaction({
+            portfolio_id: 2, // user2
+            asset_id: 2,
+            units: 7.91,
+            is_buy: false
+        })
+        t17.portfolio = p2
+        t17.asset = aa3 // cash
+        t17.price_per_unit = 1
+        await this.em.persistAndFlush(t17)
+
+        ///////////////////////////////////////////////////
+        ///////////////// create portfolio values /////////
+        ///////////////////////////////////////////////////
+        const pv1 = new PortfolioValue({
+            portfolio_id: 1,
+            value: 6211.10 // fake value, just to have multiple values
+        })
+        pv1.portfolio = p1 //user1
+        this.em.persist(pv1)
+
+        const pv2 = new PortfolioValue({
+            portfolio_id: 2,
+            value: 4002.21 // fake value, just to have multiple values
+        })
+        pv2.portfolio = p2 //user2
+        this.em.persist(pv2)
+        await this.em.flush()
+
+        const pv3 = new PortfolioValue({
+            portfolio_id: 1,
+            value: 8886.44
+        })
+        pv3.portfolio = p1 //user1
+        this.em.persist(pv3)
+
+        const pv4 = new PortfolioValue({
+            portfolio_id: 2,
+            value: 5028.68
+        })
+        pv4.portfolio = p2 //user2
+        this.em.persist(pv4)
+        await this.em.flush()
+
 
         return {
             apiKey: user1.apiKey,

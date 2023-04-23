@@ -12,7 +12,12 @@ import {
 import { PortfolioValueService } from './portfolio_value.service';
 import { CreatePortfolioValueDto } from './dto/create-portfolio_value.dto';
 import { UpdatePortfolioValueDto } from './dto/update-portfolio_value.dto';
-import { ApiTags } from '@nestjs/swagger';
+import {
+    ApiBadRequestResponse,
+    ApiForbiddenResponse,
+    ApiOkResponse,
+    ApiTags,
+} from '@nestjs/swagger';
 import { ApiAuthGuard } from 'src/auth/auth.guard';
 
 @ApiTags('Portfolio-Value')
@@ -26,8 +31,14 @@ export class PortfolioValueController {
     // create(@Body() createPortfolioValueDto: CreatePortfolioValueDto) {
     //     return this.portfolioValueService.create(createPortfolioValueDto);
     // }
+
     @UseGuards(ApiAuthGuard)
     @Get('/user/:userId')
+    @ApiOkResponse({ description: 'Successfully returned resources.' })
+    @ApiForbiddenResponse({
+        description:
+            "You are not allowed to access the value of this user's portfolio.",
+    })
     findAll(@Param('userId') userId: string, @Req() request: Request) {
         return this.portfolioValueService.findAll(+userId, request);
     }
@@ -37,6 +48,14 @@ export class PortfolioValueController {
      */
     @UseGuards(ApiAuthGuard)
     @Get(':portfolioId')
+    @ApiOkResponse({ description: 'Successfully returned resource.' })
+    @ApiForbiddenResponse({
+        description:
+            "You are not allowed to access this the value of this user's portfolio.",
+    })
+    @ApiBadRequestResponse({
+        description: 'No portfolio value has been recorded for this portfolio.',
+    })
     findOne(
         @Param('portfolioId') portfolioId: string,
         @Req() request: Request,

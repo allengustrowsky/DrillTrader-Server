@@ -131,7 +131,7 @@ export class LivePriceDataService {
                     `Initialized websocket connection for ${symbolIdx}`,
                 );
             }
-            console.log('Websocket connections completed.')
+            console.log('Websocket connections completed.');
         });
 
         socket.addEventListener('message', function (event) {

@@ -11,6 +11,8 @@ import { TransactionModule } from './transaction/transaction.module';
 import { PortfolioValueModule } from './portfolio_value/portfolio_value.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PortfolioValueLogger } from './cron/portfolio_value_logger_cron.service';
+import { PriceDataModule } from './price_data/price_data.module';
+import { LivePriceDataService } from './live_price_data/live_price_data.service';
 
 @Module({
     imports: [
@@ -22,9 +24,10 @@ import { PortfolioValueLogger } from './cron/portfolio_value_logger_cron.service
         PortfolioAssetModule,
         TransactionModule,
         PortfolioValueModule,
-        ScheduleModule.forRoot()
+        ScheduleModule.forRoot(),
+        PriceDataModule,
     ],
     controllers: [AppController],
-    providers: [AppService, PortfolioValueLogger],
+    providers: [AppService, PortfolioValueLogger, LivePriceDataService],
 })
 export class AppModule {}

@@ -61,7 +61,7 @@ export class LivePriceDataService {
         },
         "MA": {
             name: "Mastercard Inc.",
-            currentPrice: 25.155,
+            currentPrice: 375.24,
             time: new Date().getTime()
         },
         "AMZN": {
@@ -201,22 +201,29 @@ export class LivePriceDataService {
 
     async setData() {
         for (let symbolIdx of Object.keys(LivePriceDataService.callableAssets)) {
-            const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbolIdx}`, {
-                headers: {
-                    'X-Finnhub-Token': process.env.STOCK_API_KEY as string
+            try {
+                const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbolIdx}`, {
+                    headers: {
+                        'X-Finnhub-Token': process.env.STOCK_API_KEY as string
+                    }
+                })
+                // console.log(response)
+                const data = await response.json()
+                if (!data.error) { // if api minute rate limit not reached
+                    const asset = LivePriceDataService.callableAssets[symbolIdx]
+                    // console.log('before asset: ')
+                    // console.dir(asset)
+                    asset.currentPrice = data.c
+                    asset.time = data.t * 1000 // add in milliseconds to match others (going to be just 0's, so not precise)
+                    // console.log('after asset: ')
+                } else {
+                    console.log('Api rate limit reached. Quotes my be inaccurate initially.')
                 }
-            })
-            const data = await response.json()
-            if (!data.error) { // if api minute rate limit not reached
-                const asset = LivePriceDataService.callableAssets[symbolIdx]
-                // console.log('before asset: ')
-                // console.dir(asset)
-                asset.currentPrice = data.c
-                asset.time = data.t * 1000 // add in milliseconds to match others (going to be just 0's, so not precise)
-                // console.log('after asset: ')
-            } else {
-                console.log('Api rate limit reached. Quotes my be inaccurate initially.')
+            } catch (e) {
+                console.log(e)
+                console.log('An error occurred while trying to fetch live data to initalize asset prices.')
             }
+
         }
     }
 

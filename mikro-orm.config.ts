@@ -15,6 +15,7 @@ const config = {
   type: 'mysql',
   port: +(process.env.DP_PORT as string) || 3308,
   debug: true,
+  allowGlobalContext: true, // bing chat credit for telling me to add this line to access db in service-only
 } as Options;
 
 export default config;

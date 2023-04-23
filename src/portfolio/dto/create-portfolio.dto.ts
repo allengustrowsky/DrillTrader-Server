@@ -6,7 +6,7 @@ export class CreatePortfolioDto {
     //     type: Number,
     //     description: 'This is a required property',
     // })
-    // @IsNotEmpty()
-    // @IsInt()
-    // user_id: number;
+    @IsNotEmpty()
+    @IsInt()
+    user_id: number;
 }

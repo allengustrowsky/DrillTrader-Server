@@ -18,7 +18,7 @@ export class AppService {
         return 'Hello World!';
     }
 
-    async setup(): Promise<{ apiKey: string; nonAdmin: string }> {
+    async setup(): Promise<{ adminApiKey: string; nonAdminApiKey: string }> {
         try {
             // add admin user
             const user1 = new User({
@@ -384,8 +384,8 @@ export class AppService {
 
 
             return {
-                apiKey: user1.apiKey,
-                nonAdmin: user2.apiKey,
+                adminApiKey: user1.apiKey,
+                nonAdminApiKey: user2.apiKey,
             };
         } catch (e) {
             throw new HttpException(`Internal server error during setup: ${e}`, HttpStatus.INTERNAL_SERVER_ERROR)

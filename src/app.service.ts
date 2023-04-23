@@ -22,9 +22,9 @@ export class AppService {
         try {
             // add admin user
             const user1 = new User({
-                first_name: 'Allen',
-                last_name: 'Gustrowsky',
-                email_address: 'allen@may21.us',
+                first_name: 'Josh',
+                last_name: 'Williams',
+                email_address: 'jwilliams@gmail.com',
             });
             user1.is_admin = true;
             await this.em.persistAndFlush(user1);
@@ -34,9 +34,9 @@ export class AppService {
 
             // add second user
             const user2 = new User({
-                first_name: 'Brandon',
-                last_name: 'Gustrowsky',
-                email_address: 'brandon@may21.us',
+                first_name: 'Charissa',
+                last_name: 'Jones',
+                email_address: 'cjones@gmail.com',
             });
             await this.em.persistAndFlush(user2);
             const p2 = new Portfolio();

@@ -55,6 +55,11 @@ export class AppService {
             name: "Index Fund"
         })
         await this.em.persistAndFlush(a3);
+        // add crypto asset type
+        const a4 = new AssetType({
+            name: "Cryptocurrency"
+        })
+        await this.em.persistAndFlush(a4);
 
         ///////////////////////////////////////////////////
         ///////////////// Add cash asset ////////////////
@@ -170,7 +175,7 @@ export class AppService {
         aa14.asset_type = a3;
         await this.em.persistAndFlush(aa14)
 
-        // Dow Jones
+        // Dow Jones ETF
         const aa15 = new Asset({
             name: 'SPDR Dow Jones Industrial Average ETF Trust', 
             ticker_symbol: 'DIA'
@@ -178,7 +183,7 @@ export class AppService {
         aa15.asset_type = a3;
         await this.em.persistAndFlush(aa15)
 
-        // S&P 500
+        // S&P 500 ETF
         const aa16 = new Asset({
             name: 'SPDR S&P 500 ETF Trust', 
             ticker_symbol: 'SPY'
@@ -186,6 +191,12 @@ export class AppService {
         aa16.asset_type = a3;
         await this.em.persistAndFlush(aa16)
 
+        const aa17 = new Asset({
+            name: 'Binance BTCUSDT',
+            ticker_symbol: 'BINANCE:BTCUSDT'
+        })
+        aa17.asset_type = a4
+        await this.em.persistAndFlush(aa17)
 
         ///////////////////////////////////////////////////
         ///////////////// create portfolio assets ///////////

@@ -8,7 +8,7 @@ async function bootstrap() {
     app.useGlobalPipes(new ValidationPipe());
 
     const config = new DocumentBuilder()
-        .setTitle('MyStock')
+        .setTitle('Drill Trader')
         .setDescription(
             'A mock-stock-trading platform that allows users to trade common stocks at live prices.',
         )

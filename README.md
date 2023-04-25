@@ -19,7 +19,7 @@ Drill Trader simulates trading on a real-time platform for trading stocks, index
 - Binance BTCUSDT (BINANCE:BTCUSDT)
 
 ## Setup
-- Need to sign up at (Finnhub Stock Api)[https://finnhub.io/] to get an apiKey
+- Need to sign up at [Finnhub Stock Api](https://finnhub.io/) to get an apiKey
     - Put "STOCK_API_KEY=yourApiKey" in the .env files
 - Setup/run docker container (`docker compose up`)
 - Pull in dependencies: `npm install` 

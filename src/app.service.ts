@@ -14,10 +14,6 @@ import { PortfolioValue } from './portfolio_value/entities/portfolio_value.entit
 export class AppService {
     constructor(private readonly em: EntityManager) {}
 
-    getHello(): string {
-        return 'Hello World!';
-    }
-
     async setup(): Promise<{ adminApiKey: string; nonAdminApiKey: string }> {
         try {
             // add admin user

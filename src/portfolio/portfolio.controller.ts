@@ -43,7 +43,7 @@ export class PortfolioController {
     @UseGuards(ApiAuthGuard)
     @Get()
     @ApiOkResponse({ description: 'Successfully returned resources.' })
-    findAll() {
+    findAll() { // get all portfolios
         return this.portfolioService.findAll();
     }
 
@@ -53,7 +53,7 @@ export class PortfolioController {
     @ApiNotFoundResponse({ description: 'Portfolio with this id not found.' })
     @ApiForbiddenResponse({
         description: 'You are not allowed to access this portfolio.',
-    })
+    }) // get one portfolio
     findOne(@Param('id') id: string, @Req() request: Request) {
         return this.portfolioService.findOne(+id, request);
     }

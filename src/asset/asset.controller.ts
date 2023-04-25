@@ -47,7 +47,7 @@ export class AssetController {
     @UseGuards(ApiAuthGuard)
     @Get()
     @ApiOkResponse({ description: 'Successfully returned resources.' })
-    findAll() {
+    findAll() { // get all assets
         return this.assetService.findAll();
     }
 
@@ -55,7 +55,7 @@ export class AssetController {
     @Get(':id')
     @ApiOkResponse({ description: 'Successfully returned resource.' })
     @ApiNotFoundResponse({ description: 'Asset with this id not found.' })
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id') id: string) { // get one asset
         return this.assetService.findOne(+id);
     }
 

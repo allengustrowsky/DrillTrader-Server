@@ -79,23 +79,24 @@ export class PortfolioAssetService {
         return portfolio_assets;
     }
 
-    async findOne(id: number, request: Request) {
+    async findOne(userId: number, assetId: number, request: Request) {
         // make sure user is allowed to access this data (owner or admin)
-        const portfolioAsset = await this.em.findOne(PortfolioAsset, id);
-        if (!portfolioAsset) {
-            throw new HttpException(
-                `Portfolio asset with id ${id} not found.`,
-                HttpStatus.NOT_FOUND,
-            );
-        }
-
         const isAuthorized =
-            portfolioAsset.portfolio.id === (request as any).user.id ||
-            (request as any).user.is_admin;
+        userId === (request as any).user.id ||
+        (request as any).user.is_admin;
         if (!isAuthorized) {
             throw new HttpException(
                 'You are not allowed to access this portfolio asset.',
                 HttpStatus.FORBIDDEN,
+            );
+        }
+
+
+        const portfolioAsset = await this.em.findOne(PortfolioAsset, {portfolio: userId, asset: assetId});
+        if (!portfolioAsset) {
+            throw new HttpException(
+                `Portfolio asset for user ${userId} with id ${assetId} not found.`,
+                HttpStatus.NOT_FOUND,
             );
         }
 

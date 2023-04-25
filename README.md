@@ -27,7 +27,7 @@ Drill Trader simulates trading on a real-time platform for trading stocks, index
 - Make sure schema is good by running 
     1. `npm run schema:drop`
     2. `npm run schema:create`
-- Start the server: `npm run start`
+- Start the server: `npm run start` (server is not completely set up until console says "Websocket connections completed").
 - Populate sample data: hit the `/setup` endpoint, which should add sample data for two users and return a valid admin and non-admin api key.
     - Most routes require an api key (some also require the key to be an admin key). To get all routes to work, just put the admin api key into the `Authorization` header.
 - To see database data, apps like MySQLWorkbench work great. Just make a new connection to port 3308 and use the database password in the dev.env file to set it up.

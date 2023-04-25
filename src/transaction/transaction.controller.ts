@@ -66,7 +66,7 @@ export class TransactionController {
     @ApiForbiddenResponse({
         description: "You are not allowed to access this user' transactions.",
     })
-    findAll(
+    findAll( // find all transactions for a user, number of transactions specified by limit
         @Param('id') id: string,
         @Param('limit') limit: string,
         @Req() request: Request,
@@ -81,7 +81,7 @@ export class TransactionController {
     @ApiForbiddenResponse({
         description: "You are not allowed to access this user' transactions.",
     })
-    findOne(@Param('id') id: string, @Req() request: Request) {
+    findOne(@Param('id') id: string, @Req() request: Request) { // find one transaction
         return this.transactionService.findOne(+id, request);
     }
 

@@ -30,7 +30,7 @@ export class PriceDataController {
     @Get(':id')
     @ApiOkResponse({ description: 'Successfully returned resource.' })
     @ApiNotFoundResponse({ description: 'Asset with this id not found.' })
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id') id: string) { // find price of asset with given id
         return this.priceDataService.findOne(+id);
     }
 

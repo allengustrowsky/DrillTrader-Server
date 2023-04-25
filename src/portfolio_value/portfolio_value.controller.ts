@@ -39,7 +39,7 @@ export class PortfolioValueController {
         description:
             "You are not allowed to access the value of this user's portfolio.",
     })
-    findAll(@Param('userId') userId: string, @Req() request: Request) {
+    findAll(@Param('userId') userId: string, @Req() request: Request) { // get all portfolio values of a user
         return this.portfolioValueService.findAll(+userId, request);
     }
 
@@ -59,7 +59,7 @@ export class PortfolioValueController {
     findOne(
         @Param('portfolioId') portfolioId: string,
         @Req() request: Request,
-    ) {
+    ) { // get the most recent portfolio value for this user
         return this.portfolioValueService.findOne(+portfolioId, request);
     }
 

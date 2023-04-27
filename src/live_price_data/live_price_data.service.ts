@@ -2,6 +2,7 @@ import { EntityManager } from '@mikro-orm/mysql';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as WebSocket from 'ws'; // thanks to ChatGPT from helping me tweak this import so the ws constructor works
 const finnhub = require('finnhub');
+import { AssetType } from '../asset_type/assetType.enum';
 
 // key/value pair typing to fix TS error credit: Jonas Wilms from https://stackoverflow.com/questions/57350092/string-cant-be-used-to-index-type
 export interface AssetList {
@@ -9,6 +10,7 @@ export interface AssetList {
         name: string;
         currentPrice: number;
         time: number;
+        assetType: AssetType;
     };
 }
 
@@ -35,76 +37,91 @@ export class LivePriceDataService {
             name: 'Procter & Gamble Co.',
             currentPrice: 156.07,
             time: new Date().getTime(), // convert date to UNIX timestamp credit to ChatGPT
+            assetType: AssetType.Stock
         },
         MA: {
             name: 'Mastercard Inc.',
             currentPrice: 375.24,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         AMZN: {
             name: 'Amazon.com Inc.',
             currentPrice: 106.96,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         MSFT: {
             name: 'Microsoft Corporation',
             currentPrice: 285.76,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         'BRK.A': {
             name: 'Berkshire Hathaway Inc.',
             currentPrice: 496405,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         GOOGL: {
             name: 'Alphabet Inc.',
             currentPrice: 105.41,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         TSLA: {
             name: 'Tesla Inc.',
             currentPrice: 165.08,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         KO: {
             name: 'Coca-Cola Co.',
             currentPrice: 64.05,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         JPM: {
             name: 'JPMorgan Chase & Co.',
             currentPrice: 140.54,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         XOM: {
             name: 'Exxon Mobil Corporation',
             currentPrice: 116.01,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         AAPL: {
             name: 'Apple Inc.',
             currentPrice: 165.02,
             time: new Date().getTime(),
+            assetType: AssetType.Stock
         },
         VTI: {
             name: 'Vanguard Total Stock Market ETF',
             currentPrice: 205,
             time: new Date().getTime(),
+            assetType: AssetType.IndexFund
         },
         DIA: {
             name: 'SPDR Dow Jones Industrial Average ETF Trust',
             currentPrice: 338.11,
             time: new Date().getTime(),
+            assetType: AssetType.IndexFund
         },
         SPY: {
             name: 'SPDR S&P 500 ETF Trust',
             currentPrice: 412.2,
             time: new Date().getTime(),
+            assetType: AssetType.IndexFund
         },
         'BINANCE:BTCUSDT': {
             name: 'Binance BTCUSDT',
             currentPrice: 27654,
             time: new Date().getTime(),
+            assetType: AssetType.Cryptocurrency
         },
     };
 

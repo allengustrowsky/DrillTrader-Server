@@ -5,6 +5,7 @@ import {
 } from '../live_price_data/live_price_data.service';
 import { EntityManager } from '@mikro-orm/mysql';
 import { Asset } from 'src/asset/entities/asset.entity';
+import { AssetType } from 'src/asset_type/assetType.enum';
 // import { CreatePriceDatumDto } from './dto/create-price_datum.dto';
 // import { UpdatePriceDatumDto } from './dto/update-price_datum.dto';
 
@@ -17,7 +18,15 @@ export class PriceDataService {
     //   }
 
     findAll(): AssetList {
-        return LivePriceDataService.callableAssets;
+        return {
+            Cash: {
+                name: "Cash",
+                currentPrice: 1,
+                time: new Date().getTime(),
+                assetType: AssetType.Cash
+            },
+            ...LivePriceDataService.callableAssets
+        }
     }
 
     async findOne(id: number) {

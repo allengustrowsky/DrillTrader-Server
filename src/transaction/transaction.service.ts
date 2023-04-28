@@ -90,13 +90,13 @@ export class TransactionService {
         return await this.em.find(
             Transaction,
             { portfolio: id },
-            { limit, orderBy: { created_at: 'desc' } },
+            { populate: ['asset'], limit, orderBy: { created_at: 'desc' } },
         );
         // return transactions
     }
 
     async findOne(id: number, request: Request) {
-        const transaction = await this.em.findOne(Transaction, id);
+        const transaction = await this.em.findOne(Transaction, id, { populate: ['asset'] });
         if (!transaction) {
             throw new HttpException(
                 `Transaction with id ${id} not found.`,

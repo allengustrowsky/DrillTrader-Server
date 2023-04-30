@@ -70,12 +70,12 @@ export class PortfolioAssetService {
 
         const portfolio_assets = this.em.find(PortfolioAsset, {
             portfolio: id,
-        });
+        }, { populate: ['asset'] });
         return portfolio_assets;
     }
 
     async findAll() {
-        const portfolio_assets = await this.em.find(PortfolioAsset, {});
+        const portfolio_assets = await this.em.find(PortfolioAsset, {}, { populate: ['asset'] });
         return portfolio_assets;
     }
 
@@ -92,7 +92,7 @@ export class PortfolioAssetService {
         }
 
 
-        const portfolioAsset = await this.em.findOne(PortfolioAsset, {portfolio: userId, asset: assetId});
+        const portfolioAsset = await this.em.findOne(PortfolioAsset, {portfolio: userId, asset: assetId}, { populate: ['asset'] });
         if (!portfolioAsset) {
             throw new HttpException(
                 `Portfolio asset for user ${userId} with id ${assetId} not found.`,

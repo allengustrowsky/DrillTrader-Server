@@ -59,6 +59,14 @@ export class AssetController {
         return this.assetService.findOne(+id);
     }
 
+    @UseGuards(ApiAuthGuard)
+    @Get('symbol/:symbol')
+    @ApiOkResponse({ description: 'Successfully returned resource.' })
+    @ApiNotFoundResponse({ description: 'Asset with this symbol not found.' })
+    findOneSymbol(@Param('symbol') symbol: string) {
+        return this.assetService.findOneSymbol(symbol)
+    }
+
     @UseGuards(IsAdminGuard)
     @UseGuards(ApiAuthGuard)
     @Patch(':id')

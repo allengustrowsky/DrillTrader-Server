@@ -64,6 +64,14 @@ export class AssetService {
         return asset;
     }
 
+    async findOneSymbol(symbol: string) {
+        const asset = await this.em.findOne(Asset, { ticker_symbol: symbol }, { populate: ['asset_type'] })
+        if (!asset ) {
+            throw new NotFoundException(`Asset with symbol ${symbol} not found`);
+        }
+        return asset
+    }
+
     async update(id: number, updateAssetDto: UpdateAssetDto) {
         const asset = await this.em.findOne(Asset, id);
         if (!asset) {

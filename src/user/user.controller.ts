@@ -85,4 +85,11 @@ export class UserController {
     remove(@Param('id') id: string) {
         return this.userService.remove(+id);
     }
+
+    @UseGuards(ApiAuthGuard)
+    @Get('/auth/login')
+    @ApiOkResponse({ description: 'User is valid.' })
+    validate(@Req() request: Request,) {
+        return this.userService.validate(request);
+    }
 }

@@ -108,4 +108,8 @@ export class UserService {
             throw new NotFoundException(`User with id ${id} does not exist!`);
         }
     }
+
+    validate(request: Request) {
+        return (request as any).user 
+    }
 }

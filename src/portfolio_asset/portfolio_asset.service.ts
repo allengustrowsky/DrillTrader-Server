@@ -103,6 +103,26 @@ export class PortfolioAssetService {
         return portfolioAsset;
     }
 
+    async findOneBySymbol(portfolioId: number, symbol: string, request: Request) {
+        // TODO: need to add authorization
+
+        const asset = await this.em.findOne(Asset, { ticker_symbol: symbol });
+        if (!asset) {
+            throw new HttpException(`Asset with symbol ${symbol} does not exist`, HttpStatus.NOT_FOUND);
+        }
+
+        const portfolioAsset = await this.em.findOne(PortfolioAsset, {portfolio: portfolioId, asset: asset.id}, { populate: ['asset'] });
+        if (!portfolioAsset) {
+            throw new HttpException(
+                `Portfolio asset with symbol ${symbol} not found.`,
+                HttpStatus.NOT_FOUND,
+            );
+        }
+
+        return portfolioAsset;
+    }
+
+
     async update(id: number, updatePortfolioAssetDto: UpdatePortfolioAssetDto) {
         // make sure id is valid portfolio_asset id
         const portfolio_asset = await this.em.findOne(PortfolioAsset, id);

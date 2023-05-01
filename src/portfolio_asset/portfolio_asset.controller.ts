@@ -80,6 +80,17 @@ export class PortfolioAssetController {
         return this.portfolioAssetService.findOne(+userId, +assetId, request);
     }
 
+    @UseGuards(ApiAuthGuard)
+    @Get('symbol/:portfolioId/:symbol')
+    findOneBySymbol(
+        @Param('portfolioId') portfolioId: string,
+        @Param('symbol') symbol: string,
+        @Req() request: Request,
+    ) {
+        return this.portfolioAssetService.findOneBySymbol(+portfolioId, symbol, request);
+    }
+
+
     @UseGuards(IsAdminGuard)
     @UseGuards(ApiAuthGuard)
     @Patch(':id')

@@ -26,7 +26,7 @@ export class PortfolioValueService {
 
         const portfolioValues = await this.em.find(PortfolioValue, {
             portfolio: userId,
-        });
+        }, { orderBy: { created_at: 'asc' }});
         return portfolioValues;
     }
 

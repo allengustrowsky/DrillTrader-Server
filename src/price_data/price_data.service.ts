@@ -19,7 +19,7 @@ export class PriceDataService {
 
     findAll(): AssetList {
         return {
-            Cash: {
+            "$": {
                 name: "Cash",
                 currentPrice: 1,
                 time: new Date().getTime(),

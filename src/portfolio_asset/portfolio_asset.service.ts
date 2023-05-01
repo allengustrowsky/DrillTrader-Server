@@ -69,7 +69,7 @@ export class PortfolioAssetService {
         }
 
         const portfolio_assets = this.em.find(PortfolioAsset, {
-            portfolio: id,
+            portfolio: (request as any).user.portfolio,
         }, { populate: ['asset'] });
         return portfolio_assets;
     }

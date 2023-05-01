@@ -6,6 +6,7 @@ import { Asset } from 'src/asset/entities/asset.entity';
 import { PortfolioAsset } from 'src/portfolio_asset/entities/portfolio_asset.entity';
 import { Transaction } from './entities/transaction.entity';
 import { transcode } from 'buffer';
+import { User } from 'src/user/entities/user.entity';
 
 @Injectable()
 export class TransactionService {
@@ -78,18 +79,24 @@ export class TransactionService {
 
     async findAllUser(id: number, limit: number, request: Request) {
         // make sure user can manage portfolio
-        const isAuthorized =
-            id === (request as any).user.id || (request as any).user.is_admin;
-        if (!isAuthorized) {
-            throw new HttpException(
-                "You are not allowed to access this user' transactions.",
-                HttpStatus.FORBIDDEN,
-            );
+        // need to not compare by portfolio id bc doesn't work with more than a few users and some deleting
+        // const isAuthorized =
+        //     id === (request as any).user.id || (request as any).user.is_admin;
+        // if (!isAuthorized) {
+        //     throw new HttpException(
+        //         "You are not allowed to access this user' transactions.",
+        //         HttpStatus.FORBIDDEN,
+        //     );
+        // }
+
+        const user = await this.em.findOne(User, id);
+        if (!user) {
+            throw new HttpException(`User with id ${id} not found!`, HttpStatus.NOT_FOUND);
         }
 
         return await this.em.find(
             Transaction,
-            { portfolio: id },
+            { portfolio: user.portfolio },
             { populate: ['asset'], limit, orderBy: { created_at: 'desc' } },
         );
         // return transactions

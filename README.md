@@ -1,5 +1,5 @@
 # Drill Trader
-Drill Trader simulates trading on a real-time platform for trading stocks, index funds, and crypto. The purpose of this is to enable individuals to "paper trade", or practice investing without actually risking real money (a series of self-guided “drills” you could say).  A user can see a few top stocks / index funds on the main page.  These stocks will be sourced from a publicly-available API.  Users can “deposit” money and use that money to buy more assets.  To use it with a web frontend, you can optionally set that up [here](https://github.com/allengustrowsky/DrillTrader-Client).
+Drill Trader simulates trading on a real-time platform for trading stocks, index funds, and crypto. The purpose of this is to enable individuals to "paper trade", or practice investing without actually risking real money (a series of self-guided “drills” you could say).  A user can see a few top stocks / index funds on the main page.  These stocks will be sourced from a publicly-available API.  Users can “deposit” money and use that money to buy more assets.  To use this with a web frontend, you can optionally set that up [here](https://github.com/allengustrowsky/DrillTrader-Client).
  
 
 ## Allowed assets (aside from cash): 
